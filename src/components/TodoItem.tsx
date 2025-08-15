@@ -8,6 +8,11 @@ import { Todo } from "@/types/todo";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface TodoItemProps {
   todo: Todo;
@@ -68,16 +73,35 @@ export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
               className="flex items-center space-x-2 shrink-0"
               onClick={stopPropagation}
             >
-              {!todo.completed && onToggle && (
-                <Button
-                  size="sm"
-                  onClick={() => onToggle(todo.id)}
-                  className="bg-green-600 hover:bg-green-700"
-                >
-                  <Check className="h-4 w-4 mr-2" />
-                  Submit
-                </Button>
-              )}
+              {!todo.completed && onToggle &&
+                (isOverdue ? (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span tabIndex={0}>
+                        <Button
+                          size="sm"
+                          className="bg-green-600 hover:bg-green-700 w-full"
+                          disabled
+                        >
+                          <Check className="h-4 w-4 mr-2" />
+                          Submit
+                        </Button>
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>This task is overdue and cannot be submitted.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                ) : (
+                  <Button
+                    size="sm"
+                    onClick={() => onToggle(todo.id)}
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    <Check className="h-4 w-4 mr-2" />
+                    Submit
+                  </Button>
+                ))}
               {onDelete && (
                 <Button
                   variant="ghost"
