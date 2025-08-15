@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  .violet-dark {
+  .dark-violet {
     --background: 260 50% 5%;
     --foreground: 260 60% 93%;
     --card: 263 47% 11%;
