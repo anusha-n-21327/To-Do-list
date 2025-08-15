@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -12,10 +11,15 @@ import {
 } from "@/components/ui/card";
 import { Todo } from "@/types/todo";
 import { ArrowLeft } from "lucide-react";
-import { analyzeDifficulty } from "@/utils/difficulty-analyzer";
-import { cn } from "@/lib/utils";
 import { DateTimePicker } from "@/components/DateTimePicker";
 import { motion } from "framer-motion";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const AddTaskDetails = () => {
   const navigate = useNavigate();
@@ -23,9 +27,7 @@ const AddTaskDetails = () => {
   const title = location.state?.title;
 
   const [description, setDescription] = useState("");
-  const [difficulty, setDifficulty] = useState<
-    "Very Easy" | "Easy" | "Medium" | "Tough" | "Very Tough"
-  >("Medium");
+  const [difficulty, setDifficulty] = useState<Todo["difficulty"]>("Medium");
   const [dueDate, setDueDate] = useState<Date>();
 
   useEffect(() => {
@@ -33,13 +35,6 @@ const AddTaskDetails = () => {
       navigate("/add-task");
     }
   }, [title, navigate]);
-
-  useEffect(() => {
-    if (title) {
-      const determinedDifficulty = analyzeDifficulty(title, description);
-      setDifficulty(determinedDifficulty);
-    }
-  }, [title, description]);
 
   const handleSave = () => {
     const newTodo: Todo = {
@@ -57,25 +52,8 @@ const AddTaskDetails = () => {
       const updatedTodos = [newTodo, ...todos];
       localStorage.setItem("todos", JSON.stringify(updatedTodos));
       navigate("/");
-    } catch (error) {
+    } catch (error) from {
       console.error("Failed to save todo to localStorage", error);
-    }
-  };
-
-  const getDifficultyBadgeClass = (difficulty: Todo["difficulty"]) => {
-    switch (difficulty) {
-      case "Very Easy":
-        return "bg-sky-500 hover:bg-sky-600";
-      case "Easy":
-        return "bg-emerald-500 hover:bg-emerald-600";
-      case "Medium":
-        return "bg-amber-500 hover:bg-amber-600";
-      case "Tough":
-        return "bg-orange-500 hover:bg-orange-600";
-      case "Very Tough":
-        return "bg-destructive hover:bg-destructive/90";
-      default:
-        return "bg-muted hover:bg-muted/90";
     }
   };
 
@@ -132,17 +110,33 @@ const AddTaskDetails = () => {
               <DateTimePicker date={dueDate} setDate={setDueDate} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-muted-foreground mb-2">
-                Detected Difficulty
-              </label>
-              <Badge
-                className={cn(
-                  "text-white border-none text-base px-4 py-2",
-                  getDifficultyBadgeClass(difficulty)
-                )}
+              <label
+                htmlFor="difficulty"
+                className="block text-sm font-medium text-muted-foreground mb-2"
               >
-                {difficulty}
-              </Badge>
+                Difficulty
+              </label>
+              <Select
+                value={difficulty}
+                onValueChange={(value: Todo["difficulty"]) =>
+                  setDifficulty(value)
+                }
+              >
+                <SelectTrigger
+                  id="difficulty"
+                  className="w-full bg-input border-border"
+                >
+                  <SelectValue placeholder="Select difficulty" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Very Easy">Very Easy</SelectItem>
+                  <SelectItem value="Easy">Easy</SelectItem>
+                  <SelectItem value="Medium">Medium</SelectItem>
+                  <SelectItem value="Challenging">Challenging</SelectItem>
+                  <SelectItem value="Tough">Tough</SelectItem>
+                  <SelectItem value="Very Tough">Very Tough</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <Button
               onClick={handleSave}

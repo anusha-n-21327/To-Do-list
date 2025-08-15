@@ -35,6 +35,8 @@ export const TodoItem = ({
         return "bg-emerald-500 hover:bg-emerald-600";
       case "Medium":
         return "bg-amber-500 hover:bg-amber-600";
+      case "Challenging":
+        return "bg-yellow-500 hover:bg-yellow-600";
       case "Tough":
         return "bg-orange-500 hover:bg-orange-600";
       case "Very Tough":
