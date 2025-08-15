@@ -16,6 +16,14 @@ const TOUGH_KEYWORDS = [
   "build",
   "create",
 ];
+const CHALLENGING_KEYWORDS = [
+  "complex",
+  "detailed",
+  "investigate",
+  "analyze",
+  "optimize",
+  "test",
+];
 const EASY_KEYWORDS = [
   "email",
   "buy",
@@ -30,7 +38,7 @@ const VERY_EASY_KEYWORDS = ["call", "text", "quick", "simple", "check", "send"];
 export const analyzeDifficulty = (
   title: string,
   description: string
-): "Very Easy" | "Easy" | "Medium" | "Tough" | "Very Tough" => {
+): "Very Easy" | "Easy" | "Medium" | "Challenging" | "Tough" | "Very Tough" => {
   const text = `${title.toLowerCase()} ${description.toLowerCase()}`;
   const textLength = text.length;
 
@@ -46,6 +54,13 @@ export const analyzeDifficulty = (
     textLength > 120
   ) {
     return "Tough";
+  }
+
+  if (
+    CHALLENGING_KEYWORDS.some((keyword) => text.includes(keyword)) ||
+    textLength > 90
+  ) {
+    return "Challenging";
   }
 
   if (

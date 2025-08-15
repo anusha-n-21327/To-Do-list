@@ -13,14 +13,8 @@ import { Todo } from "@/types/todo";
 import { ArrowLeft } from "lucide-react";
 import { DateTimePicker } from "@/components/DateTimePicker";
 import { motion } from "framer-motion";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { getIconForTask } from "@/utils/icon-mapper";
+import { analyzeDifficulty } from "@/utils/difficulty-analyzer";
 
 const AddTaskDetails = () => {
   const navigate = useNavigate();
@@ -28,7 +22,6 @@ const AddTaskDetails = () => {
   const title = location.state?.title;
 
   const [description, setDescription] = useState("");
-  const [difficulty, setDifficulty] = useState<Todo["difficulty"]>("Medium");
   const [dueDate, setDueDate] = useState<Date>();
 
   useEffect(() => {
@@ -38,6 +31,7 @@ const AddTaskDetails = () => {
   }, [title, navigate]);
 
   const handleSave = () => {
+    const difficulty = analyzeDifficulty(title, description);
     const newTodo: Todo = {
       id: crypto.randomUUID(),
       text: title,
@@ -110,35 +104,6 @@ const AddTaskDetails = () => {
                 Due Date & Time (Optional)
               </label>
               <DateTimePicker date={dueDate} setDate={setDueDate} />
-            </div>
-            <div>
-              <label
-                htmlFor="difficulty"
-                className="block text-sm font-medium text-muted-foreground mb-2"
-              >
-                Difficulty
-              </label>
-              <Select
-                value={difficulty}
-                onValueChange={(value: Todo["difficulty"]) =>
-                  setDifficulty(value)
-                }
-              >
-                <SelectTrigger
-                  id="difficulty"
-                  className="w-full bg-input border-border"
-                >
-                  <SelectValue placeholder="Select difficulty" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Very Easy">Very Easy</SelectItem>
-                  <SelectItem value="Easy">Easy</SelectItem>
-                  <SelectItem value="Medium">Medium</SelectItem>
-                  <SelectItem value="Challenging">Challenging</SelectItem>
-                  <SelectItem value="Tough">Tough</SelectItem>
-                  <SelectItem value="Very Tough">Very Tough</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
             <Button
               onClick={handleSave}
