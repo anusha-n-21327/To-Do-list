@@ -14,7 +14,7 @@ import { ArrowLeft, CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
-import { TransitionOverlay } from "@/components/TransitionOverlay";
+import { MorphingOverlay } from "@/components/MorphingOverlay";
 
 const TaskDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -81,7 +81,7 @@ const TaskDetails = () => {
 
   return (
     <motion.div exit={{ opacity: 0, transition: { duration: 0.2 } }}>
-      <TransitionOverlay />
+      <MorphingOverlay />
       <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-2xl">
           <div className="mb-4 self-start">
