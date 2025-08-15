@@ -39,6 +39,12 @@ export const ThemeSwitcher = () => {
         <DropdownMenuItem onClick={() => setTheme("green-dark")}>
           Forest Green
         </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("sunset-dark")}>
+          Sunset
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("aurora-dark")}>
+          Aurora
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

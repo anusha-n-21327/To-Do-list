@@ -1,6 +1,13 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-type Theme = "light" | "dark" | "blue-dark" | "purple-dark" | "green-dark";
+type Theme =
+  | "light"
+  | "dark"
+  | "blue-dark"
+  | "purple-dark"
+  | "green-dark"
+  | "sunset-dark"
+  | "aurora-dark";
 
 interface ThemeContextType {
   theme: Theme;
@@ -22,13 +29,15 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       "dark",
       "blue-dark",
       "purple-dark",
-      "green-dark"
+      "green-dark",
+      "sunset-dark",
+      "aurora-dark"
     );
-    
-    if (theme === 'light') {
-      root.classList.remove('dark');
+
+    if (theme === "light") {
+      root.classList.remove("dark");
     } else {
-      root.classList.add('dark');
+      root.classList.add("dark");
     }
 
     root.classList.add(theme);

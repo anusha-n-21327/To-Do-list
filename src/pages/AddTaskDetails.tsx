@@ -93,10 +93,10 @@ const AddTaskDetails = () => {
     >
       <Card className="w-full max-w-md bg-card/50 border-border">
         <CardHeader>
-          <CardTitle className="text-center text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-transparent bg-clip-text">
+          <CardTitle className="text-center text-2xl font-bold tracking-tight bg-gradient-to-r from-title-from via-title-via to-title-to text-transparent bg-clip-text">
             Task Details
           </CardTitle>
-          <CardDescription className="text-center text-muted-foreground">
+          <CardDescription className="text-center text-subtitle">
             Step 2: Add details and we'll detect the difficulty.
           </CardDescription>
         </CardHeader>

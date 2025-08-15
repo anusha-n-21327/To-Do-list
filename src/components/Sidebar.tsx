@@ -26,7 +26,7 @@ export const Sidebar = ({ filter, setFilter, counts }: SidebarProps) => {
   return (
     <aside className="w-64 flex-shrink-0 bg-card/50 border-r border-border p-4 rounded-l-lg flex flex-col justify-between">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-transparent bg-clip-text mb-6">
+        <h2 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-title-from via-title-via to-title-to text-transparent bg-clip-text mb-6">
           Todo App
         </h2>
         <nav className="flex flex-col space-y-2">

@@ -81,7 +81,7 @@ const TaskDetails = () => {
         </div>
         <Card className="w-full bg-card/50 border-border">
           <CardHeader>
-            <CardTitle className="text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-transparent bg-clip-text">
+            <CardTitle className="text-3xl font-bold tracking-tight bg-gradient-to-r from-title-from via-title-via to-title-to text-transparent bg-clip-text">
               {task.text}
             </CardTitle>
             {task.completed && (

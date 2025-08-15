@@ -66,6 +66,10 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        subtitle: "hsl(var(--subtitle-color))",
+        "title-from": "hsl(var(--title-gradient-from))",
+        "title-via": "hsl(var(--title-gradient-via))",
+        "title-to": "hsl(var(--title-gradient-to))",
       },
       borderRadius: {
         lg: "var(--radius)",
