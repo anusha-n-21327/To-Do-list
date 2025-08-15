@@ -3,13 +3,7 @@ export interface Todo {
   text: string;
   description: string;
   completed: boolean;
-  difficulty:
-    | "Very Easy"
-    | "Easy"
-    | "Medium"
-    | "Challenging"
-    | "Tough"
-    | "Very Tough";
+  difficulty: "Very Easy" | "Easy" | "Challenging" | "Tough" | "Difficult";
   dueDate?: string;
   icon: string;
 }

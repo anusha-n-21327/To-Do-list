@@ -35,13 +35,11 @@ const TaskDetails = () => {
         return "bg-sky-500 hover:bg-sky-600";
       case "Easy":
         return "bg-emerald-500 hover:bg-emerald-600";
-      case "Medium":
-        return "bg-amber-500 hover:bg-amber-600";
       case "Challenging":
         return "bg-yellow-500 hover:bg-yellow-600";
       case "Tough":
         return "bg-orange-500 hover:bg-orange-600";
-      case "Very Tough":
+      case "Difficult":
         return "bg-destructive hover:bg-destructive/90";
       default:
         return "bg-muted hover:bg-muted/90";
