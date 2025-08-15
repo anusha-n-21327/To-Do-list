@@ -1,3 +1,11 @@
+const VERY_TOUGH_KEYWORDS = [
+  "architecture",
+  "database",
+  "deployment",
+  "end-to-end",
+  "entire",
+  "refactor",
+];
 const TOUGH_KEYWORDS = [
   "project",
   "research",
@@ -9,40 +17,50 @@ const TOUGH_KEYWORDS = [
   "create",
 ];
 const EASY_KEYWORDS = [
-  "call",
   "email",
   "buy",
-  "quick",
-  "simple",
   "schedule",
   "book",
-  "text",
   "reply",
+  "review",
+  "update",
 ];
+const VERY_EASY_KEYWORDS = ["call", "text", "quick", "simple", "check", "send"];
 
 export const analyzeDifficulty = (
   title: string,
   description: string
-): "Easy" | "Medium" | "Tough" => {
+): "Very Easy" | "Easy" | "Medium" | "Tough" | "Very Tough" => {
   const text = `${title.toLowerCase()} ${description.toLowerCase()}`;
   const textLength = text.length;
 
-  // Check for tough keywords or very long text
+  if (
+    VERY_TOUGH_KEYWORDS.some((keyword) => text.includes(keyword)) ||
+    textLength > 200
+  ) {
+    return "Very Tough";
+  }
+
   if (
     TOUGH_KEYWORDS.some((keyword) => text.includes(keyword)) ||
-    textLength > 150
+    textLength > 120
   ) {
     return "Tough";
   }
 
-  // Check for easy keywords or very short text
+  if (
+    VERY_EASY_KEYWORDS.some((keyword) => text.includes(keyword)) ||
+    textLength < 30
+  ) {
+    return "Very Easy";
+  }
+
   if (
     EASY_KEYWORDS.some((keyword) => text.includes(keyword)) ||
-    textLength < 50
+    textLength < 60
   ) {
     return "Easy";
   }
 
-  // Default to Medium
   return "Medium";
 };

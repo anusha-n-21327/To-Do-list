@@ -10,10 +10,17 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 import { Todo } from "@/types/todo";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CalendarIcon } from "lucide-react";
 import { analyzeDifficulty } from "@/utils/difficulty-analyzer";
 import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 
 const AddTaskDetails = () => {
   const navigate = useNavigate();
@@ -21,9 +28,10 @@ const AddTaskDetails = () => {
   const title = location.state?.title;
 
   const [description, setDescription] = useState("");
-  const [difficulty, setDifficulty] = useState<"Easy" | "Medium" | "Tough">(
-    "Medium"
-  );
+  const [difficulty, setDifficulty] = useState<
+    "Very Easy" | "Easy" | "Medium" | "Tough" | "Very Tough"
+  >("Medium");
+  const [dueDate, setDueDate] = useState<Date>();
 
   useEffect(() => {
     if (!title) {
@@ -45,6 +53,7 @@ const AddTaskDetails = () => {
       description,
       completed: false,
       difficulty,
+      dueDate: dueDate ? dueDate.toISOString() : undefined,
     };
 
     try {
@@ -60,11 +69,15 @@ const AddTaskDetails = () => {
 
   const getDifficultyBadgeClass = (difficulty: Todo["difficulty"]) => {
     switch (difficulty) {
+      case "Very Easy":
+        return "bg-sky-600 hover:bg-sky-700";
       case "Easy":
         return "bg-green-600 hover:bg-green-700";
       case "Medium":
         return "bg-yellow-600 hover:bg-yellow-700";
       case "Tough":
+        return "bg-orange-600 hover:bg-orange-700";
+      case "Very Tough":
         return "bg-red-600 hover:bg-red-700";
       default:
         return "bg-slate-600 hover:bg-slate-700";
@@ -83,7 +96,7 @@ const AddTaskDetails = () => {
             Task Details
           </CardTitle>
           <CardDescription className="text-center text-slate-400">
-            Step 2: Add a description and we'll detect the difficulty.
+            Step 2: Add details and we'll detect the difficulty.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -110,6 +123,33 @@ const AddTaskDetails = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-400"
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Due Date (Optional)
+              </label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "w-full justify-start text-left font-normal bg-slate-800 border-slate-700 hover:bg-slate-700 hover:text-white",
+                      !dueDate && "text-slate-400"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {dueDate ? format(dueDate, "PPP") : <span>Pick a date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={dueDate}
+                    onSelect={setDueDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">
