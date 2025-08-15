@@ -63,7 +63,7 @@ export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
               <p
                 className={cn(
                   "font-medium text-slate-100",
-                  todo.completed && "line-through text-slate-500"
+                  todo.completed && "text-slate-500"
                 )}
               >
                 {todo.text}
@@ -73,7 +73,15 @@ export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
               className="flex items-center space-x-2 shrink-0"
               onClick={stopPropagation}
             >
-              {!todo.completed && onToggle &&
+              {todo.completed ? (
+                <Badge
+                  variant="outline"
+                  className="text-green-400 border-green-400"
+                >
+                  Completed
+                </Badge>
+              ) : (
+                onToggle &&
                 (isOverdue ? (
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -101,7 +109,8 @@ export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
                     <Check className="h-4 w-4 mr-2" />
                     Submit
                   </Button>
-                ))}
+                ))
+              )}
               {onDelete && (
                 <Button
                   variant="ghost"
