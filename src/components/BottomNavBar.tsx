@@ -15,10 +15,15 @@ interface BottomNavBarProps {
 }
 
 const navItems = [
-  { id: "all", label: "All", icon: List },
-  { id: "present", label: "Present", icon: Clock },
-  { id: "completed", label: "Completed", icon: CheckCircle },
-  { id: "missed", label: "Missed", icon: XCircle },
+  { id: "all", label: "All", icon: List, color: "" },
+  { id: "present", label: "Present", icon: Clock, color: "text-yellow-500" },
+  {
+    id: "completed",
+    label: "Completed",
+    icon: CheckCircle,
+    color: "text-success",
+  },
+  { id: "missed", label: "Missed", icon: XCircle, color: "text-destructive" },
 ];
 
 export const BottomNavBar = ({
@@ -47,7 +52,12 @@ export const BottomNavBar = ({
               />
             )}
             <div className="relative">
-              <item.icon className="h-6 w-6" />
+              <item.icon
+                className={cn(
+                  "h-6 w-6",
+                  filter !== item.id ? item.color : ""
+                )}
+              />
               <span className="absolute -top-1 -right-2 text-xs bg-muted text-muted-foreground rounded-full px-1.5 py-0.5">
                 {counts[item.id as keyof typeof counts]}
               </span>

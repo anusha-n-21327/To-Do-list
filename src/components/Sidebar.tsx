@@ -15,10 +15,20 @@ interface SidebarProps {
 }
 
 const navItems = [
-  { id: "all", label: "All Tasks", icon: List },
-  { id: "present", label: "Present Tasks", icon: Clock },
-  { id: "completed", label: "Completed", icon: CheckCircle },
-  { id: "missed", label: "Missed", icon: XCircle },
+  { id: "all", label: "All Tasks", icon: List, color: "" },
+  {
+    id: "present",
+    label: "Present Tasks",
+    icon: Clock,
+    color: "text-yellow-500",
+  },
+  {
+    id: "completed",
+    label: "Completed",
+    icon: CheckCircle,
+    color: "text-success",
+  },
+  { id: "missed", label: "Missed", icon: XCircle, color: "text-destructive" },
 ];
 
 export const Sidebar = ({ filter, setFilter, counts }: SidebarProps) => {
@@ -48,7 +58,7 @@ export const Sidebar = ({ filter, setFilter, counts }: SidebarProps) => {
               />
             )}
             <div className="relative z-10 flex items-center w-full">
-              <item.icon className="mr-3 h-5 w-5" />
+              <item.icon className={cn("mr-3 h-5 w-5", item.color)} />
               <span>{item.label}</span>
               <span className="ml-auto text-xs bg-muted/50 text-muted-foreground rounded-full px-2 py-0.5">
                 {counts[item.id as keyof typeof counts]}
