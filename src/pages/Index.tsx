@@ -2,11 +2,10 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { TodoItem } from "@/components/TodoItem";
 import { Todo } from "@/types/todo";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, LayoutDashboard } from "lucide-react";
+import { Plus } from "lucide-react";
 import { MadeWithDyad } from "@/components/made-with-dyad";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Sidebar } from "@/components/Sidebar";
 import {
   getCompletedTasks,
   getMissedTasks,
@@ -53,14 +52,18 @@ const Index = () => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
+  const pendingTasks = getPendingTasks(todos);
+  const completedTasks = getCompletedTasks(todos);
+  const missedTasks = getMissedTasks(todos);
+
   const getFilteredTodos = () => {
     switch (filter) {
       case "pending":
-        return getPendingTasks(todos);
+        return pendingTasks;
       case "completed":
-        return getCompletedTasks(todos);
+        return completedTasks;
       case "missed":
-        return getMissedTasks(todos);
+        return missedTasks;
       default:
         return todos;
     }
@@ -68,62 +71,48 @@ const Index = () => {
 
   const filteredTodos = getFilteredTodos();
 
+  const counts = {
+    all: todos.length,
+    pending: pendingTasks.length,
+    completed: completedTasks.length,
+    missed: missedTasks.length,
+  };
+
   return (
-    <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <Card className="bg-slate-800/50 border-slate-700">
-          <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle className="text-center text-3xl font-bold tracking-tight bg-gradient-to-r from-violet-500 to-cyan-500 text-transparent bg-clip-text">
-                Todo List
-              </CardTitle>
-              <Link to="/dashboard" title="Go to Dashboard">
-                <Button variant="ghost" size="icon">
-                  <LayoutDashboard className="h-5 w-5 text-slate-400 hover:text-slate-200" />
-                </Button>
-              </Link>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="mb-6">
-              <Link to="/add-task" className="w-full">
-                <Button className="w-full bg-violet-600 hover:bg-violet-700">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add a new task
-                </Button>
-              </Link>
-            </div>
-            <Tabs
-              defaultValue="all"
-              onValueChange={setFilter}
-              className="w-full mb-6"
-            >
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="pending">Pending</TabsTrigger>
-                <TabsTrigger value="completed">Completed</TabsTrigger>
-                <TabsTrigger value="missed">Missed</TabsTrigger>
-              </TabsList>
-            </Tabs>
-            <div className="space-y-4">
-              {filteredTodos.length > 0 ? (
-                filteredTodos.map((todo) => (
-                  <TodoItem
-                    key={todo.id}
-                    todo={todo}
-                    onToggle={toggleTodo}
-                    onDelete={deleteTodo}
-                  />
-                ))
-              ) : (
+    <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center p-4">
+      <div className="w-full max-w-4xl h-[80vh] flex">
+        <Sidebar filter={filter} setFilter={setFilter} counts={counts} />
+        <main className="flex-1 bg-slate-800/30 p-6 rounded-r-lg overflow-y-auto">
+          <div className="space-y-4">
+            {filteredTodos.length > 0 ? (
+              filteredTodos.map((todo) => (
+                <TodoItem
+                  key={todo.id}
+                  todo={todo}
+                  onToggle={toggleTodo}
+                  onDelete={deleteTodo}
+                />
+              ))
+            ) : (
+              <div className="flex items-center justify-center h-full">
                 <p className="text-center text-slate-500">
                   No tasks in this category.
                 </p>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+              </div>
+            )}
+          </div>
+        </main>
       </div>
+
+      <Link to="/add-task">
+        <Button
+          className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-violet-600 hover:bg-violet-700 shadow-lg"
+          size="icon"
+        >
+          <Plus className="h-8 w-8" />
+        </Button>
+      </Link>
+
       <div className="absolute bottom-0">
         <MadeWithDyad />
       </div>
