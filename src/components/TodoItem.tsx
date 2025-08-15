@@ -48,10 +48,7 @@ export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -50 }}
       transition={{ duration: 0.3 }}
-      whileHover={{
-        scale: 1.03,
-        boxShadow: "0px 8px 20px rgba(139, 92, 246, 0.2)",
-      }}
+      whileHover={{ scale: 1.02 }}
       className="rounded-lg"
     >
       <Link to={`/task/${todo.id}`} className="block">

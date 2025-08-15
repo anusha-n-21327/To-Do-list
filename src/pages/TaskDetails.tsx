@@ -70,7 +70,7 @@ const TaskDetails = () => {
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 10, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
@@ -79,10 +79,10 @@ const TaskDetails = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: 50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -50 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -15 }}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
       className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-4"
     >
       <div className="w-full max-w-2xl">

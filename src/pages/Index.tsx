@@ -81,10 +81,10 @@ const Index = () => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: -30 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 30 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -15 }}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
     >
       <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center p-4">
         <div className="w-full max-w-4xl h-[80vh] flex">
