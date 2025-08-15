@@ -4,7 +4,7 @@ import { TodoItem } from "@/components/TodoItem";
 import { Todo } from "@/types/todo";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { MadeWithDyad } from "@/components/made-with-dyad";
+import { Footer } from "@/components/Footer";
 import { Sidebar } from "@/components/Sidebar";
 import {
   getCompletedTasks,
@@ -145,7 +145,7 @@ const Index = () => {
         />
 
         <div className="absolute bottom-0">
-          <MadeWithDyad />
+          <Footer />
         </div>
       </div>
     </motion.div>
