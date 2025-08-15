@@ -14,7 +14,6 @@ import { ArrowLeft, CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
-import { MorphingOverlay } from "@/components/MorphingOverlay";
 
 const TaskDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -60,107 +59,81 @@ const TaskDetails = () => {
   const isOverdue =
     task.dueDate && new Date(task.dueDate) < new Date() && !task.completed;
 
-  const contentContainerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        delay: 0.5, // Delay content animation until overlay is revealing
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 10, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-    },
-  };
-
   return (
-    <motion.div exit={{ opacity: 0, transition: { duration: 0.2 } }}>
-      <MorphingOverlay />
-      <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-4">
-        <div className="w-full max-w-2xl">
-          <div className="mb-4 self-start">
-            <Link to="/">
-              <Button
-                variant="outline"
-                className="bg-transparent border-slate-600 hover:bg-slate-700"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Task List
-              </Button>
-            </Link>
-          </div>
-          <Card className="w-full bg-slate-800/50 border-slate-700">
-            <motion.div
-              variants={contentContainerVariants}
-              initial="hidden"
-              animate="visible"
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-4"
+    >
+      <div className="w-full max-w-2xl">
+        <div className="mb-4 self-start">
+          <Link to="/">
+            <Button
+              variant="outline"
+              className="bg-transparent border-slate-600 hover:bg-slate-700"
             >
-              <motion.div variants={itemVariants}>
-                <CardHeader>
-                  <CardTitle className="text-3xl font-bold tracking-tight bg-gradient-to-r from-violet-500 to-cyan-500 text-transparent bg-clip-text">
-                    {task.text}
-                  </CardTitle>
-                  {task.completed && (
-                    <CardDescription className="text-green-400">
-                      Completed
-                    </CardDescription>
-                  )}
-                </CardHeader>
-              </motion.div>
-              <motion.div variants={itemVariants}>
-                <CardContent className="space-y-6">
-                  {task.description && (
-                    <div>
-                      <h3 className="text-lg font-semibold text-slate-300 mb-2">
-                        Description
-                      </h3>
-                      <p className="text-slate-400 whitespace-pre-wrap">
-                        {task.description}
-                      </p>
-                    </div>
-                  )}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-700/50">
-                    <div>
-                      <h3 className="text-sm font-medium text-slate-300 mb-2">
-                        Difficulty
-                      </h3>
-                      <Badge
-                        className={cn(
-                          "text-white border-none text-base px-4 py-2",
-                          getDifficultyBadgeClass(task.difficulty)
-                        )}
-                      >
-                        {task.difficulty}
-                      </Badge>
-                    </div>
-                    {task.dueDate && (
-                      <div>
-                        <h3 className="text-sm font-medium text-slate-300 mb-2">
-                          Due Date
-                        </h3>
-                        <div
-                          className={cn(
-                            "flex items-center text-slate-300",
-                            isOverdue && "text-red-400 font-semibold"
-                          )}
-                        >
-                          <CalendarIcon className="h-4 w-4 mr-2" />
-                          {format(new Date(task.dueDate), "PPP p")}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </motion.div>
-            </motion.div>
-          </Card>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Task List
+            </Button>
+          </Link>
         </div>
+        <Card className="w-full bg-slate-800/50 border-slate-700">
+          <CardHeader>
+            <CardTitle className="text-3xl font-bold tracking-tight bg-gradient-to-r from-violet-500 to-cyan-500 text-transparent bg-clip-text">
+              {task.text}
+            </CardTitle>
+            {task.completed && (
+              <CardDescription className="text-green-400">
+                Completed
+              </CardDescription>
+            )}
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {task.description && (
+              <div>
+                <h3 className="text-lg font-semibold text-slate-300 mb-2">
+                  Description
+                </h3>
+                <p className="text-slate-400 whitespace-pre-wrap">
+                  {task.description}
+                </p>
+              </div>
+            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-700/50">
+              <div>
+                <h3 className="text-sm font-medium text-slate-300 mb-2">
+                  Difficulty
+                </h3>
+                <Badge
+                  className={cn(
+                    "text-white border-none text-base px-4 py-2",
+                    getDifficultyBadgeClass(task.difficulty)
+                  )}
+                >
+                  {task.difficulty}
+                </Badge>
+              </div>
+              {task.dueDate && (
+                <div>
+                  <h3 className="text-sm font-medium text-slate-300 mb-2">
+                    Due Date
+                  </h3>
+                  <div
+                    className={cn(
+                      "flex items-center text-slate-300",
+                      isOverdue && "text-red-400 font-semibold"
+                    )}
+                  >
+                    <CalendarIcon className="h-4 w-4 mr-2" />
+                    {format(new Date(task.dueDate), "PPP p")}
+                  </div>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </motion.div>
   );
