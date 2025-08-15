@@ -95,10 +95,10 @@ const Index = () => {
       exit={{ opacity: 0, transition: { duration: 0.2 } }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
     >
-      <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4">
         <div className="w-full max-w-4xl h-[80vh] flex">
           <Sidebar filter={filter} setFilter={setFilter} counts={counts} />
-          <main className="flex-1 bg-slate-800/30 p-6 rounded-r-lg overflow-y-auto">
+          <main className="flex-1 bg-card/30 p-6 rounded-r-lg overflow-y-auto">
             <div className="space-y-4">
               <AnimatePresence>
                 {filteredTodos.length > 0 ? (
@@ -118,7 +118,7 @@ const Index = () => {
                     exit={{ opacity: 0 }}
                     className="flex items-center justify-center h-full"
                   >
-                    <p className="text-center text-slate-500">
+                    <p className="text-center text-muted-foreground">
                       No tasks in this category.
                     </p>
                   </motion.div>
@@ -130,7 +130,7 @@ const Index = () => {
 
         <Link to="/add-task">
           <Button
-            className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-violet-600 hover:bg-violet-700 shadow-lg"
+            className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-primary hover:bg-primary/90 shadow-lg"
             size="icon"
           >
             <Plus className="h-8 w-8" />

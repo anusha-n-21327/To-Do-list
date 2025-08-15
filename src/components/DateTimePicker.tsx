@@ -56,8 +56,8 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
         <Button
           variant={"outline"}
           className={cn(
-            "w-full justify-start text-left font-normal bg-slate-800 border-slate-700 hover:bg-slate-700 hover:text-white",
-            !date && "text-slate-400"
+            "w-full justify-start text-left font-normal bg-input border-border hover:bg-muted hover:text-foreground",
+            !date && "text-muted-foreground"
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
@@ -76,7 +76,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
             type="time"
             value={time}
             onChange={handleTimeChange}
-            className="bg-slate-800 border-slate-700 text-white"
+            className="bg-input border-border text-foreground"
           />
         </div>
       </PopoverContent>

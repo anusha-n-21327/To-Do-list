@@ -29,14 +29,14 @@ const AddTask = () => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -15 }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
-      className="min-h-screen bg-slate-900 text-white flex items-center justify-center p-4"
+      className="min-h-screen bg-background text-foreground flex items-center justify-center p-4"
     >
-      <Card className="w-full max-w-md bg-slate-800/50 border-slate-700">
+      <Card className="w-full max-w-md bg-card/50 border-border">
         <CardHeader>
-          <CardTitle className="text-center text-2xl font-bold tracking-tight bg-gradient-to-r from-violet-500 to-cyan-500 text-transparent bg-clip-text">
+          <CardTitle className="text-center text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-transparent bg-clip-text">
             Add a New Task
           </CardTitle>
-          <CardDescription className="text-center text-slate-400">
+          <CardDescription className="text-center text-muted-foreground">
             Step 1: What is your task?
           </CardDescription>
         </CardHeader>
@@ -45,7 +45,7 @@ const AddTask = () => {
             <div>
               <label
                 htmlFor="title"
-                className="block text-sm font-medium text-slate-300 mb-2"
+                className="block text-sm font-medium text-muted-foreground mb-2"
               >
                 Task Title
               </label>
@@ -56,13 +56,13 @@ const AddTask = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
-                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-400"
+                className="bg-input border-border text-foreground placeholder:text-muted-foreground"
                 autoFocus
               />
             </div>
             <Button
               type="submit"
-              className="w-full bg-violet-600 hover:bg-violet-700"
+              className="w-full bg-primary hover:bg-primary/90"
             >
               Next
             </Button>
@@ -70,7 +70,7 @@ const AddTask = () => {
           <div className="mt-4 text-center">
             <Link
               to="/"
-              className="text-sm text-slate-400 hover:text-slate-200 flex items-center justify-center"
+              className="text-sm text-muted-foreground hover:text-foreground flex items-center justify-center"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to list

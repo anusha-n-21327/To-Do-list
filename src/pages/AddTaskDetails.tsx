@@ -65,17 +65,17 @@ const AddTaskDetails = () => {
   const getDifficultyBadgeClass = (difficulty: Todo["difficulty"]) => {
     switch (difficulty) {
       case "Very Easy":
-        return "bg-sky-600 hover:bg-sky-700";
+        return "bg-sky-500 hover:bg-sky-600";
       case "Easy":
-        return "bg-green-600 hover:bg-green-700";
+        return "bg-emerald-500 hover:bg-emerald-600";
       case "Medium":
-        return "bg-yellow-600 hover:bg-yellow-700";
+        return "bg-amber-500 hover:bg-amber-600";
       case "Tough":
-        return "bg-orange-600 hover:bg-orange-700";
+        return "bg-orange-500 hover:bg-orange-600";
       case "Very Tough":
-        return "bg-red-600 hover:bg-red-700";
+        return "bg-destructive hover:bg-destructive/90";
       default:
-        return "bg-slate-600 hover:bg-slate-700";
+        return "bg-muted hover:bg-muted/90";
     }
   };
 
@@ -89,31 +89,31 @@ const AddTaskDetails = () => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -15 }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
-      className="min-h-screen bg-slate-900 text-white flex items-center justify-center p-4"
+      className="min-h-screen bg-background text-foreground flex items-center justify-center p-4"
     >
-      <Card className="w-full max-w-md bg-slate-800/50 border-slate-700">
+      <Card className="w-full max-w-md bg-card/50 border-border">
         <CardHeader>
-          <CardTitle className="text-center text-2xl font-bold tracking-tight bg-gradient-to-r from-violet-500 to-cyan-500 text-transparent bg-clip-text">
+          <CardTitle className="text-center text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-transparent bg-clip-text">
             Task Details
           </CardTitle>
-          <CardDescription className="text-center text-slate-400">
+          <CardDescription className="text-center text-muted-foreground">
             Step 2: Add details and we'll detect the difficulty.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-muted-foreground mb-2">
                 Task Title
               </label>
-              <p className="p-3 rounded-md bg-slate-900 border border-slate-700 text-slate-200">
+              <p className="p-3 rounded-md bg-background border border-border text-foreground">
                 {title}
               </p>
             </div>
             <div>
               <label
                 htmlFor="description"
-                className="block text-sm font-medium text-slate-300 mb-2"
+                className="block text-sm font-medium text-muted-foreground mb-2"
               >
                 Description (Optional)
               </label>
@@ -122,17 +122,17 @@ const AddTaskDetails = () => {
                 placeholder="Add more details here..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-400"
+                className="bg-input border-border text-foreground placeholder:text-muted-foreground"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-muted-foreground mb-2">
                 Due Date & Time (Optional)
               </label>
               <DateTimePicker date={dueDate} setDate={setDueDate} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-muted-foreground mb-2">
                 Detected Difficulty
               </label>
               <Badge
@@ -146,7 +146,7 @@ const AddTaskDetails = () => {
             </div>
             <Button
               onClick={handleSave}
-              className="w-full bg-violet-600 hover:bg-violet-700"
+              className="w-full bg-primary hover:bg-primary/90"
             >
               Save Task
             </Button>
@@ -155,7 +155,7 @@ const AddTaskDetails = () => {
             <Link
               to="/add-task"
               state={{ title }}
-              className="text-sm text-slate-400 hover:text-slate-200 flex items-center justify-center"
+              className="text-sm text-muted-foreground hover:text-foreground flex items-center justify-center"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to previous step

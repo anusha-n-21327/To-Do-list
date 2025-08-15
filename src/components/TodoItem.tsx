@@ -30,17 +30,17 @@ export const TodoItem = ({
   const getDifficultyBadgeClass = (difficulty: Todo["difficulty"]) => {
     switch (difficulty) {
       case "Very Easy":
-        return "bg-sky-600 hover:bg-sky-700";
+        return "bg-sky-500 hover:bg-sky-600";
       case "Easy":
-        return "bg-green-600 hover:bg-green-700";
+        return "bg-emerald-500 hover:bg-emerald-600";
       case "Medium":
-        return "bg-yellow-600 hover:bg-yellow-700";
+        return "bg-amber-500 hover:bg-amber-600";
       case "Tough":
-        return "bg-orange-600 hover:bg-orange-700";
+        return "bg-orange-500 hover:bg-orange-600";
       case "Very Tough":
-        return "bg-red-600 hover:bg-red-700";
+        return "bg-destructive hover:bg-destructive/90";
       default:
-        return "bg-slate-600 hover:bg-slate-700";
+        return "bg-muted hover:bg-muted/90";
     }
   };
 
@@ -67,13 +67,13 @@ export const TodoItem = ({
       className="rounded-lg"
     >
       <Link to={`/task/${todo.id}`} className="block">
-        <div className="p-4 bg-slate-800 rounded-lg border border-slate-700 space-y-3 hover:bg-slate-700/50 transition-colors h-full">
+        <div className="p-4 bg-card rounded-lg border border-border space-y-3 hover:bg-muted/50 transition-colors h-full">
           <div className="flex items-start justify-between">
             <div className="flex-1 pr-4">
               <p
                 className={cn(
-                  "font-medium text-slate-100",
-                  todo.completed && "text-slate-500"
+                  "font-medium text-foreground",
+                  todo.completed && "text-muted-foreground"
                 )}
               >
                 {todo.text}
@@ -102,7 +102,7 @@ export const TodoItem = ({
                   <Button
                     size="sm"
                     onClick={() => onToggle(todo.id)}
-                    className="bg-green-600 hover:bg-green-700"
+                    className="bg-success hover:bg-success/90"
                   >
                     <Check className="h-4 w-4 mr-2" />
                     Submit
@@ -118,7 +118,7 @@ export const TodoItem = ({
                         size="icon"
                         onClick={onEdit}
                         disabled={isDueSoon}
-                        className="text-slate-400 hover:text-blue-500 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="text-muted-foreground hover:text-secondary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -136,7 +136,7 @@ export const TodoItem = ({
                   variant="ghost"
                   size="icon"
                   onClick={() => onDelete(todo.id)}
-                  className="text-slate-400 hover:text-red-500 hover:bg-slate-700"
+                  className="text-muted-foreground hover:text-destructive hover:bg-muted"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -144,7 +144,7 @@ export const TodoItem = ({
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-3 border-t border-slate-700/50">
+          <div className="flex items-center justify-between pt-3 border-t border-border/50">
             <Badge
               className={cn(
                 "text-white border-none",
@@ -156,8 +156,8 @@ export const TodoItem = ({
             {todo.dueDate && (
               <div
                 className={cn(
-                  "flex items-center text-xs text-slate-400",
-                  isOverdue && "text-red-400 font-semibold"
+                  "flex items-center text-xs text-muted-foreground",
+                  isOverdue && "text-destructive font-semibold"
                 )}
               >
                 <CalendarIcon className="h-3 w-3 mr-1.5" />

@@ -49,7 +49,7 @@ export const EditTaskDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] bg-slate-800 border-slate-700 text-white">
+      <DialogContent className="sm:max-w-[425px] bg-card border-border text-foreground">
         <DialogHeader>
           <DialogTitle>Edit Task</DialogTitle>
           <DialogDescription>
@@ -58,15 +58,15 @@ export const EditTaskDialog = ({
         </DialogHeader>
         <div className="py-4">
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-300">
+            <label className="block text-sm font-medium text-muted-foreground">
               Task Title
             </label>
-            <p className="p-3 rounded-md bg-slate-900 border border-slate-700 text-slate-200">
+            <p className="p-3 rounded-md bg-background border border-border text-foreground">
               {task.text}
             </p>
           </div>
           <div className="space-y-2 mt-4">
-            <label className="block text-sm font-medium text-slate-300">
+            <label className="block text-sm font-medium text-muted-foreground">
               Due Date & Time
             </label>
             <DateTimePicker date={dueDate} setDate={setDueDate} />
@@ -76,13 +76,13 @@ export const EditTaskDialog = ({
           <Button
             variant="outline"
             onClick={onClose}
-            className="bg-slate-700 hover:bg-slate-600 border-slate-600"
+            className="bg-muted hover:bg-muted/90 border-border"
           >
             Cancel
           </Button>
           <Button
             onClick={handleSave}
-            className="bg-violet-600 hover:bg-violet-700"
+            className="bg-primary hover:bg-primary/90"
           >
             Save Changes
           </Button>

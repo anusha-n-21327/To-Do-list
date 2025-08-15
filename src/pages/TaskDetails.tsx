@@ -31,23 +31,23 @@ const TaskDetails = () => {
   const getDifficultyBadgeClass = (difficulty: Todo["difficulty"]) => {
     switch (difficulty) {
       case "Very Easy":
-        return "bg-sky-600 hover:bg-sky-700";
+        return "bg-sky-500 hover:bg-sky-600";
       case "Easy":
-        return "bg-green-600 hover:bg-green-700";
+        return "bg-emerald-500 hover:bg-emerald-600";
       case "Medium":
-        return "bg-yellow-600 hover:bg-yellow-700";
+        return "bg-amber-500 hover:bg-amber-600";
       case "Tough":
-        return "bg-orange-600 hover:bg-orange-700";
+        return "bg-orange-500 hover:bg-orange-600";
       case "Very Tough":
-        return "bg-red-600 hover:bg-red-700";
+        return "bg-destructive hover:bg-destructive/90";
       default:
-        return "bg-slate-600 hover:bg-slate-700";
+        return "bg-muted hover:bg-muted/90";
     }
   };
 
   if (!task) {
     return (
-      <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <p>Task not found.</p>
         <Link to="/">
           <Button variant="link">Go back</Button>
@@ -65,23 +65,23 @@ const TaskDetails = () => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-4"
+      className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4"
     >
       <div className="w-full max-w-2xl">
         <div className="mb-4 self-start">
           <Link to="/">
             <Button
               variant="outline"
-              className="bg-transparent border-slate-600 hover:bg-slate-700"
+              className="bg-transparent border-border hover:bg-muted"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Task List
             </Button>
           </Link>
         </div>
-        <Card className="w-full bg-slate-800/50 border-slate-700">
+        <Card className="w-full bg-card/50 border-border">
           <CardHeader>
-            <CardTitle className="text-3xl font-bold tracking-tight bg-gradient-to-r from-violet-500 to-cyan-500 text-transparent bg-clip-text">
+            <CardTitle className="text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-transparent bg-clip-text">
               {task.text}
             </CardTitle>
             {task.completed && (
@@ -93,17 +93,17 @@ const TaskDetails = () => {
           <CardContent className="space-y-6">
             {task.description && (
               <div>
-                <h3 className="text-lg font-semibold text-slate-300 mb-2">
+                <h3 className="text-lg font-semibold text-muted-foreground mb-2">
                   Description
                 </h3>
-                <p className="text-slate-400 whitespace-pre-wrap">
+                <p className="text-muted-foreground whitespace-pre-wrap">
                   {task.description}
                 </p>
               </div>
             )}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-700/50">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-border/50">
               <div>
-                <h3 className="text-sm font-medium text-slate-300 mb-2">
+                <h3 className="text-sm font-medium text-muted-foreground mb-2">
                   Difficulty
                 </h3>
                 <Badge
@@ -117,13 +117,13 @@ const TaskDetails = () => {
               </div>
               {task.dueDate && (
                 <div>
-                  <h3 className="text-sm font-medium text-slate-300 mb-2">
+                  <h3 className="text-sm font-medium text-muted-foreground mb-2">
                     Due Date
                   </h3>
                   <div
                     className={cn(
-                      "flex items-center text-slate-300",
-                      isOverdue && "text-red-400 font-semibold"
+                      "flex items-center text-foreground",
+                      isOverdue && "text-destructive font-semibold"
                     )}
                   >
                     <CalendarIcon className="h-4 w-4 mr-2" />
