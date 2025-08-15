@@ -52,7 +52,7 @@ export const TodoItem = ({
 
   const isDueSoon = todo.dueDate
     ? differenceInMinutes(new Date(todo.dueDate), new Date()) <= 5
-    | false;
+    : false;
 
   const stopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
