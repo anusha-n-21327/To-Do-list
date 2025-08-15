@@ -134,6 +134,9 @@ const Index = () => {
               isMobile ? "rounded-lg pb-24" : "rounded-r-lg"
             )}
           >
+            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-title-from via-title-via to-title-to text-transparent bg-clip-text mb-6">
+              Your Dashboard
+            </h1>
             <div className="space-y-4">
               <AnimatePresence>
                 {filteredTodos.length > 0 ? (
