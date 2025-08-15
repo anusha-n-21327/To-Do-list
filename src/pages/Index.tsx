@@ -12,10 +12,12 @@ import {
   getActiveTasks,
 } from "@/utils/task-categorizer";
 import { motion, AnimatePresence } from "framer-motion";
+import { EditTaskDialog } from "@/components/EditTaskDialog";
 
 const Index = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState("all");
+  const [editingTask, setEditingTask] = useState<Todo | null>(null);
 
   useEffect(() => {
     const loadTodos = () => {
@@ -51,6 +53,13 @@ const Index = () => {
 
   const deleteTodo = (id: string) => {
     setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
+  const updateTodo = (updatedTask: Todo) => {
+    setTodos(
+      todos.map((todo) => (todo.id === updatedTask.id ? updatedTask : todo))
+    );
+    setEditingTask(null);
   };
 
   const activeTasks = getActiveTasks(todos);
@@ -99,6 +108,7 @@ const Index = () => {
                       todo={todo}
                       onToggle={toggleTodo}
                       onDelete={deleteTodo}
+                      onEdit={() => setEditingTask(todo)}
                     />
                   ))
                 ) : (
@@ -126,6 +136,13 @@ const Index = () => {
             <Plus className="h-8 w-8" />
           </Button>
         </Link>
+
+        <EditTaskDialog
+          isOpen={!!editingTask}
+          onClose={() => setEditingTask(null)}
+          task={editingTask}
+          onSave={updateTodo}
+        />
 
         <div className="absolute bottom-0">
           <MadeWithDyad />

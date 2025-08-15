@@ -1,11 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Trash2, CalendarIcon, Check } from "lucide-react";
+import { Trash2, CalendarIcon, Check, Edit } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Todo } from "@/types/todo";
-import { format } from "date-fns";
+import { format, differenceInMinutes } from "date-fns";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -18,9 +18,15 @@ interface TodoItemProps {
   todo: Todo;
   onToggle?: (id: string) => void;
   onDelete?: (id: string) => void;
+  onEdit?: () => void;
 }
 
-export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
+export const TodoItem = ({
+  todo,
+  onToggle,
+  onDelete,
+  onEdit,
+}: TodoItemProps) => {
   const getDifficultyBadgeClass = (difficulty: Todo["difficulty"]) => {
     switch (difficulty) {
       case "Very Easy":
@@ -40,6 +46,10 @@ export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
 
   const isOverdue =
     todo.dueDate && new Date(todo.dueDate) < new Date() && !todo.completed;
+
+  const isDueSoon = todo.dueDate
+    ? differenceInMinutes(new Date(todo.dueDate), new Date()) <= 5
+    : false;
 
   const stopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -110,6 +120,28 @@ export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
                     Submit
                   </Button>
                 ))
+              )}
+              {onEdit && !todo.completed && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span tabIndex={0}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={onEdit}
+                        disabled={isDueSoon}
+                        className="text-slate-400 hover:text-blue-500 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  {isDueSoon && (
+                    <TooltipContent>
+                      <p>Cannot edit task within 5 minutes of due time.</p>
+                    </TooltipContent>
+                  )}
+                </Tooltip>
               )}
               {onDelete && (
                 <Button
