@@ -31,17 +31,17 @@ export const TodoItem = ({
   const getDifficultyBadgeClass = (difficulty: Todo["difficulty"]) => {
     switch (difficulty) {
       case "Very Easy":
-        return "bg-sky-500 hover:bg-sky-600";
+        return "bg-cyan-500 hover:bg-cyan-600";
       case "Easy":
-        return "bg-emerald-500 hover:bg-emerald-600";
+        return "bg-teal-500 hover:bg-teal-600";
       case "Challenging":
-        return "bg-yellow-500 hover:bg-yellow-600";
+        return "bg-amber-500 hover:bg-amber-600";
       case "Tough":
-        return "bg-orange-500 hover:bg-orange-600";
+        return "bg-orange-600 hover:bg-orange-700";
       case "Difficult":
-        return "bg-destructive hover:bg-destructive/90";
+        return "bg-red-600 hover:bg-red-700";
       case "Very Tough":
-        return "bg-gradient-to-r from-title-from via-title-via to-title-to text-primary-foreground";
+        return "bg-gradient-to-r from-fuchsia-600 via-purple-600 to-indigo-600 text-primary-foreground";
       default:
         return "bg-muted hover:bg-muted/90";
     }
