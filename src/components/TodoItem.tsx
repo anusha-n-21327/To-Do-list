@@ -48,9 +48,14 @@ export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -50 }}
       transition={{ duration: 0.3 }}
+      whileHover={{
+        scale: 1.03,
+        boxShadow: "0px 8px 20px rgba(139, 92, 246, 0.2)",
+      }}
+      className="rounded-lg"
     >
       <Link to={`/task/${todo.id}`} className="block">
-        <div className="p-4 bg-slate-800 rounded-lg border border-slate-700 space-y-3 hover:bg-slate-700/50 transition-colors">
+        <div className="p-4 bg-slate-800 rounded-lg border border-slate-700 space-y-3 hover:bg-slate-700/50 transition-colors h-full">
           <div className="flex items-start justify-between">
             <div className="flex-1 pr-4">
               <p

@@ -10,6 +10,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
+import { motion } from "framer-motion";
 
 const AddTask = () => {
   const [title, setTitle] = useState("");
@@ -23,7 +24,13 @@ const AddTask = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center p-4">
+    <motion.div
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -50 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className="min-h-screen bg-slate-900 text-white flex items-center justify-center p-4"
+    >
       <Card className="w-full max-w-md bg-slate-800/50 border-slate-700">
         <CardHeader>
           <CardTitle className="text-center text-2xl font-bold tracking-tight bg-gradient-to-r from-violet-500 to-cyan-500 text-transparent bg-clip-text">
@@ -71,7 +78,7 @@ const AddTask = () => {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </motion.div>
   );
 };
 

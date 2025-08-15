@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CheckCircle, Clock, XCircle, List } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface SidebarProps {
   filter: string;
@@ -33,15 +34,24 @@ export const Sidebar = ({ filter, setFilter, counts }: SidebarProps) => {
             variant="ghost"
             onClick={() => setFilter(item.id)}
             className={cn(
-              "w-full justify-start text-slate-300 hover:bg-slate-700 hover:text-white",
-              filter === item.id && "bg-slate-700 text-white"
+              "w-full justify-start text-slate-300 hover:bg-slate-700 hover:text-white relative",
+              filter === item.id && "text-white"
             )}
           >
-            <item.icon className="mr-3 h-5 w-5" />
-            <span>{item.label}</span>
-            <span className="ml-auto text-xs bg-slate-600 text-slate-200 rounded-full px-2 py-0.5">
-              {counts[item.id as keyof typeof counts]}
-            </span>
+            {filter === item.id && (
+              <motion.div
+                layoutId="active-indicator"
+                className="absolute inset-0 bg-slate-700 rounded-md z-0"
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              />
+            )}
+            <div className="relative z-10 flex items-center w-full">
+              <item.icon className="mr-3 h-5 w-5" />
+              <span>{item.label}</span>
+              <span className="ml-auto text-xs bg-slate-600 text-slate-200 rounded-full px-2 py-0.5">
+                {counts[item.id as keyof typeof counts]}
+              </span>
+            </div>
           </Button>
         ))}
       </nav>
