@@ -55,7 +55,7 @@ const Landing = () => {
             to="/dashboard"
             className="text-sm text-muted-foreground hover:text-foreground"
           >
-            or go to my task list
+            have a look on dashboard
           </Link>
         </motion.div>
       </div>
