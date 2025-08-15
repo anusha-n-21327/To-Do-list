@@ -53,9 +53,9 @@ const Landing = () => {
         >
           <Link
             to="/dashboard"
-            className="text-sm text-muted-foreground hover:text-foreground"
+            className="text-sm font-bold text-muted-foreground hover:text-foreground"
           >
-            have a look on dashboard
+            Have a Look on Dashboard
           </Link>
         </motion.div>
       </div>
