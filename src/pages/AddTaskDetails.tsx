@@ -1,0 +1,141 @@
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate, Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Todo } from "@/types/todo";
+import { ArrowLeft } from "lucide-react";
+
+const AddTaskDetails = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const title = location.state?.title;
+
+  const [description, setDescription] = useState("");
+  const [difficulty, setDifficulty] = useState<"Easy" | "Medium" | "Tough">(
+    "Medium"
+  );
+
+  useEffect(() => {
+    if (!title) {
+      navigate("/add-task");
+    }
+  }, [title, navigate]);
+
+  const handleSave = () => {
+    const newTodo: Todo = {
+      id: crypto.randomUUID(),
+      text: title,
+      description,
+      completed: false,
+      difficulty,
+    };
+
+    try {
+      const savedTodos = localStorage.getItem("todos");
+      const todos = savedTodos ? JSON.parse(savedTodos) : [];
+      const updatedTodos = [newTodo, ...todos];
+      localStorage.setItem("todos", JSON.stringify(updatedTodos));
+      navigate("/");
+    } catch (error) {
+      console.error("Failed to save todo to localStorage", error);
+    }
+  };
+
+  if (!title) {
+    return null;
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-slate-800/50 border-slate-700">
+        <CardHeader>
+          <CardTitle className="text-center text-2xl font-bold tracking-tight bg-gradient-to-r from-violet-500 to-cyan-500 text-transparent bg-clip-text">
+            Task Details
+          </CardTitle>
+          <CardDescription className="text-center text-slate-400">
+            Step 2: Add a description and difficulty.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Task Title
+              </label>
+              <p className="p-3 rounded-md bg-slate-900 border border-slate-700 text-slate-200">
+                {title}
+              </p>
+            </div>
+            <div>
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-slate-300 mb-2"
+              >
+                Description (Optional)
+              </label>
+              <Textarea
+                id="description"
+                placeholder="Add more details here..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-400"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Difficulty
+              </label>
+              <RadioGroup
+                defaultValue="Medium"
+                onValueChange={(value: "Easy" | "Medium" | "Tough") =>
+                  setDifficulty(value)
+                }
+                className="flex space-x-4"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="Easy" id="r1" />
+                  <Label htmlFor="r1">Easy</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="Medium" id="r2" />
+                  <Label htmlFor="r2">Medium</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="Tough" id="r3" />
+                  <Label htmlFor="r3">Tough</Label>
+                </div>
+              </RadioGroup>
+            </div>
+            <Button
+              onClick={handleSave}
+              className="w-full bg-violet-600 hover:bg-violet-700"
+            >
+              Save Task
+            </Button>
+          </div>
+          <div className="mt-4 text-center">
+            <Link
+              to="/add-task"
+              state={{ title }}
+              className="text-sm text-slate-400 hover:text-slate-200 flex items-center justify-center"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to previous step
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default AddTaskDetails;

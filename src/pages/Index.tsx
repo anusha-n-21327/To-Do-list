@@ -1,32 +1,40 @@
 import { useState, useEffect } from "react";
-import { AddTodoForm } from "@/components/AddTodoForm";
-import { TodoItem, Todo } from "@/components/TodoItem";
+import { Link } from "react-router-dom";
+import { TodoItem } from "@/components/TodoItem";
+import { Todo } from "@/types/todo";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 import { MadeWithDyad } from "@/components/made-with-dyad";
 
 const Index = () => {
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    try {
-      const savedTodos = localStorage.getItem("todos");
-      return savedTodos ? JSON.parse(savedTodos) : [];
-    } catch (error) {
-      console.error("Failed to parse todos from localStorage", error);
-      return [];
-    }
-  });
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
-
-  const addTodo = (text: string) => {
-    const newTodo: Todo = {
-      id: crypto.randomUUID(),
-      text,
-      completed: false,
+    const loadTodos = () => {
+      try {
+        const savedTodos = localStorage.getItem("todos");
+        setTodos(savedTodos ? JSON.parse(savedTodos) : []);
+      } catch (error) {
+        console.error("Failed to parse todos from localStorage", error);
+        setTodos([]);
+      }
     };
-    setTodos([newTodo, ...todos]);
-  };
+
+    loadTodos();
+    window.addEventListener("focus", loadTodos);
+    return () => {
+      window.removeEventListener("focus", loadTodos);
+    };
+  }, []);
+
+  useEffect(() => {
+    // This effect ensures that changes made on this page (toggle, delete) are saved.
+    // It avoids writing an empty array on initial load before todos are fetched.
+    if (todos.length > 0 || localStorage.getItem("todos") !== null) {
+      localStorage.setItem("todos", JSON.stringify(todos));
+    }
+  }, [todos]);
 
   const toggleTodo = (id: string) => {
     setTodos(
@@ -50,8 +58,15 @@ const Index = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <AddTodoForm onAdd={addTodo} />
-            <div className="mt-6 space-y-4">
+            <div className="mb-6">
+              <Link to="/add-task" className="w-full">
+                <Button className="w-full bg-violet-600 hover:bg-violet-700">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add a new task
+                </Button>
+              </Link>
+            </div>
+            <div className="space-y-4">
               {todos.length > 0 ? (
                 todos.map((todo) => (
                   <TodoItem
@@ -63,7 +78,7 @@ const Index = () => {
                 ))
               ) : (
                 <p className="text-center text-slate-500">
-                  No todos yet. Add one above!
+                  No todos yet. Add one to get started!
                 </p>
               )}
             </div>
