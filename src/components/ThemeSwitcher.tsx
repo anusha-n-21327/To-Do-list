@@ -24,26 +24,11 @@ export const ThemeSwitcher = () => {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Select Theme</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
+        <DropdownMenuItem onClick={() => setTheme("violet-light")}>
+          Violet Light
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
           Colorful Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("blue-dark")}>
-          Ocean Blue
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("purple-dark")}>
-          Violet Night
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("green-dark")}>
-          Forest Green
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("sunset-dark")}>
-          Sunset
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("aurora-dark")}>
-          Aurora
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
