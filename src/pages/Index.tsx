@@ -13,6 +13,7 @@ import {
 } from "@/utils/task-categorizer";
 import { motion, AnimatePresence } from "framer-motion";
 import { EditTaskDialog } from "@/components/EditTaskDialog";
+import { getIconForTask } from "@/utils/icon-mapper";
 
 const Index = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -23,7 +24,25 @@ const Index = () => {
     const loadTodos = () => {
       try {
         const savedTodos = localStorage.getItem("todos");
-        setTodos(savedTodos ? JSON.parse(savedTodos) : []);
+        const parsedTodos: Todo[] = savedTodos ? JSON.parse(savedTodos) : [];
+
+        let needsUpdate = false;
+        const migratedTodos = parsedTodos.map((todo) => {
+          if (!todo.icon) {
+            needsUpdate = true;
+            return {
+              ...todo,
+              icon: getIconForTask(todo.text, todo.description),
+            };
+          }
+          return todo;
+        });
+
+        if (needsUpdate) {
+          localStorage.setItem("todos", JSON.stringify(migratedTodos));
+        }
+
+        setTodos(migratedTodos);
       } catch (error) {
         console.error("Failed to parse todos from localStorage", error);
         setTodos([]);

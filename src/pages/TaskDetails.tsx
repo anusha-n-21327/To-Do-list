@@ -14,6 +14,7 @@ import { ArrowLeft, CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
+import { TaskIcon } from "@/components/TaskIcon";
 
 const TaskDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -83,11 +84,14 @@ const TaskDetails = () => {
         </div>
         <Card className="w-full bg-card/50 border-border">
           <CardHeader>
-            <CardTitle className="text-3xl font-bold tracking-tight bg-gradient-to-r from-title-from via-title-via to-title-to text-transparent bg-clip-text">
-              {task.text}
-            </CardTitle>
+            <div className="flex items-center space-x-3">
+              <TaskIcon name={task.icon} className="h-8 w-8 text-primary" />
+              <CardTitle className="text-3xl font-bold tracking-tight bg-gradient-to-r from-title-from via-title-via to-title-to text-transparent bg-clip-text">
+                {task.text}
+              </CardTitle>
+            </div>
             {task.completed && (
-              <CardDescription className="text-green-400">
+              <CardDescription className="text-green-400 mt-2">
                 Completed
               </CardDescription>
             )}

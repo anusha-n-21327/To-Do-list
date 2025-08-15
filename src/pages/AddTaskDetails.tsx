@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getIconForTask } from "@/utils/icon-mapper";
 
 const AddTaskDetails = () => {
   const navigate = useNavigate();
@@ -44,6 +45,7 @@ const AddTaskDetails = () => {
       completed: false,
       difficulty,
       dueDate: dueDate ? dueDate.toISOString() : undefined,
+      icon: getIconForTask(title, description),
     };
 
     try {

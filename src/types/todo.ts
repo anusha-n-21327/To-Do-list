@@ -11,4 +11,5 @@ export interface Todo {
     | "Tough"
     | "Very Tough";
   dueDate?: string;
+  icon: string;
 }

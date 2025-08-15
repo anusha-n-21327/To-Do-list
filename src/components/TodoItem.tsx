@@ -13,6 +13,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { TaskIcon } from "./TaskIcon";
 
 interface TodoItemProps {
   todo: Todo;
@@ -51,7 +52,7 @@ export const TodoItem = ({
 
   const isDueSoon = todo.dueDate
     ? differenceInMinutes(new Date(todo.dueDate), new Date()) <= 5
-    : false;
+    | false;
 
   const stopPropagation = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -71,7 +72,11 @@ export const TodoItem = ({
       <Link to={`/task/${todo.id}`} className="block">
         <div className="p-4 bg-card rounded-lg border border-border space-y-3 hover:bg-muted/50 transition-colors h-full">
           <div className="flex items-start justify-between">
-            <div className="flex-1 pr-4">
+            <div className="flex items-center flex-1 pr-4 space-x-3">
+              <TaskIcon
+                name={todo.icon}
+                className="h-5 w-5 text-muted-foreground"
+              />
               <p
                 className={cn(
                   "font-medium text-foreground",
