@@ -90,27 +90,15 @@ export const TodoItem = ({
                 >
                   Completed
                 </Badge>
+              ) : isOverdue ? (
+                <Badge
+                  variant="outline"
+                  className="text-red-400 border-red-400"
+                >
+                  Overdue
+                </Badge>
               ) : (
-                onToggle &&
-                (isOverdue ? (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span tabIndex={0}>
-                        <Button
-                          size="sm"
-                          className="bg-green-600 hover:bg-green-700 w-full"
-                          disabled
-                        >
-                          <Check className="h-4 w-4 mr-2" />
-                          Submit
-                        </Button>
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>This task is overdue and cannot be submitted.</p>
-                    </TooltipContent>
-                  </Tooltip>
-                ) : (
+                onToggle && (
                   <Button
                     size="sm"
                     onClick={() => onToggle(todo.id)}
@@ -119,7 +107,7 @@ export const TodoItem = ({
                     <Check className="h-4 w-4 mr-2" />
                     Submit
                   </Button>
-                ))
+                )
               )}
               {onEdit && !todo.completed && (
                 <Tooltip>
