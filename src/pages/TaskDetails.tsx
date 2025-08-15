@@ -133,7 +133,7 @@ const TaskDetails = () => {
                       <Badge
                         className={cn(
                           "text-white border-none text-base px-4 py-2",
-                          getDifficultyBadge-class(task.difficulty)
+                          getDifficultyBadgeClass(task.difficulty)
                         )}
                       >
                         {task.difficulty}
