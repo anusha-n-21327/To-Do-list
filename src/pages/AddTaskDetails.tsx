@@ -136,6 +136,7 @@ const AddTaskDetails = () => {
                   <SelectItem value="Challenging">Challenging</SelectItem>
                   <SelectItem value="Tough">Tough</SelectItem>
                   <SelectItem value="Difficult">Difficult</SelectItem>
+                  <SelectItem value="Very Tough">Very Tough</SelectItem>
                 </SelectContent>
               </Select>
             </div>

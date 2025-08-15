@@ -41,6 +41,8 @@ const TaskDetails = () => {
         return "bg-orange-500 hover:bg-orange-600";
       case "Difficult":
         return "bg-destructive hover:bg-destructive/90";
+      case "Very Tough":
+        return "bg-gradient-to-r from-title-from via-title-via to-title-to text-primary-foreground";
       default:
         return "bg-muted hover:bg-muted/90";
     }
