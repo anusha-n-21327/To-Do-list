@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -13,6 +12,8 @@ import {
 } from "@/components/ui/card";
 import { Todo } from "@/types/todo";
 import { ArrowLeft } from "lucide-react";
+import { analyzeDifficulty } from "@/utils/difficulty-analyzer";
+import { cn } from "@/lib/utils";
 
 const AddTaskDetails = () => {
   const navigate = useNavigate();
@@ -29,6 +30,13 @@ const AddTaskDetails = () => {
       navigate("/add-task");
     }
   }, [title, navigate]);
+
+  useEffect(() => {
+    if (title) {
+      const determinedDifficulty = analyzeDifficulty(title, description);
+      setDifficulty(determinedDifficulty);
+    }
+  }, [title, description]);
 
   const handleSave = () => {
     const newTodo: Todo = {
@@ -50,6 +58,19 @@ const AddTaskDetails = () => {
     }
   };
 
+  const getDifficultyBadgeClass = (difficulty: Todo["difficulty"]) => {
+    switch (difficulty) {
+      case "Easy":
+        return "bg-green-600 hover:bg-green-700";
+      case "Medium":
+        return "bg-yellow-600 hover:bg-yellow-700";
+      case "Tough":
+        return "bg-red-600 hover:bg-red-700";
+      default:
+        return "bg-slate-600 hover:bg-slate-700";
+    }
+  };
+
   if (!title) {
     return null;
   }
@@ -62,7 +83,7 @@ const AddTaskDetails = () => {
             Task Details
           </CardTitle>
           <CardDescription className="text-center text-slate-400">
-            Step 2: Add a description and difficulty.
+            Step 2: Add a description and we'll detect the difficulty.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -92,28 +113,16 @@ const AddTaskDetails = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">
-                Difficulty
+                Detected Difficulty
               </label>
-              <RadioGroup
-                defaultValue="Medium"
-                onValueChange={(value: "Easy" | "Medium" | "Tough") =>
-                  setDifficulty(value)
-                }
-                className="flex space-x-4"
+              <Badge
+                className={cn(
+                  "text-white border-none text-base px-4 py-2",
+                  getDifficultyBadgeClass(difficulty)
+                )}
               >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Easy" id="r1" />
-                  <Label htmlFor="r1">Easy</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Medium" id="r2" />
-                  <Label htmlFor="r2">Medium</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Tough" id="r3" />
-                  <Label htmlFor="r3">Tough</Label>
-                </div>
-              </RadioGroup>
+                {difficulty}
+              </Badge>
             </div>
             <Button
               onClick={handleSave}
