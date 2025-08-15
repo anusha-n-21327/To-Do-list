@@ -97,7 +97,7 @@ const AddTaskDetails = () => {
             Task Details
           </CardTitle>
           <CardDescription className="text-center text-subtitle">
-            Step 2: Add details and we'll detect the difficulty.
+            Great! Now, let's add some details.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -119,7 +119,7 @@ const AddTaskDetails = () => {
               </label>
               <Textarea
                 id="description"
-                placeholder="Add more details here..."
+                placeholder="Unpack your mission... what are the details?"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="bg-input border-border text-foreground placeholder:text-muted-foreground"

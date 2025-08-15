@@ -37,7 +37,7 @@ const AddTask = () => {
             Add a New Task
           </CardTitle>
           <CardDescription className="text-center text-subtitle">
-            Step 1: What is your task?
+            Let's start with the big picture. What's the mission?
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -52,7 +52,7 @@ const AddTask = () => {
               <Input
                 id="title"
                 type="text"
-                placeholder="e.g., Finish project report"
+                placeholder="What's your next mission?"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
