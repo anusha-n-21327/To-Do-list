@@ -28,7 +28,6 @@ export const Sidebar = ({ filter, setFilter, counts }: SidebarProps) => {
         <h2 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-title-from via-title-via to-title-to text-transparent bg-clip-text">
           Todo App
         </h2>
-        <p className="text-sm text-muted-foreground">Dashboard</p>
       </div>
       <nav className="flex flex-col space-y-2">
         {navItems.map((item) => (
