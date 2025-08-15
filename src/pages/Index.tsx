@@ -11,6 +11,7 @@ import {
   getMissedTasks,
   getActiveTasks,
 } from "@/utils/task-categorizer";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Index = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -79,44 +80,58 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl h-[80vh] flex">
-        <Sidebar filter={filter} setFilter={setFilter} counts={counts} />
-        <main className="flex-1 bg-slate-800/30 p-6 rounded-r-lg overflow-y-auto">
-          <div className="space-y-4">
-            {filteredTodos.length > 0 ? (
-              filteredTodos.map((todo) => (
-                <TodoItem
-                  key={todo.id}
-                  todo={todo}
-                  onToggle={toggleTodo}
-                  onDelete={deleteTodo}
-                />
-              ))
-            ) : (
-              <div className="flex items-center justify-center h-full">
-                <p className="text-center text-slate-500">
-                  No tasks in this category.
-                </p>
-              </div>
-            )}
-          </div>
-        </main>
-      </div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center p-4">
+        <div className="w-full max-w-4xl h-[80vh] flex">
+          <Sidebar filter={filter} setFilter={setFilter} counts={counts} />
+          <main className="flex-1 bg-slate-800/30 p-6 rounded-r-lg overflow-y-auto">
+            <div className="space-y-4">
+              <AnimatePresence>
+                {filteredTodos.length > 0 ? (
+                  filteredTodos.map((todo) => (
+                    <TodoItem
+                      key={todo.id}
+                      todo={todo}
+                      onToggle={toggleTodo}
+                      onDelete={deleteTodo}
+                    />
+                  ))
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex items-center justify-center h-full"
+                  >
+                    <p className="text-center text-slate-500">
+                      No tasks in this category.
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </main>
+        </div>
 
-      <Link to="/add-task">
-        <Button
-          className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-violet-600 hover:bg-violet-700 shadow-lg"
-          size="icon"
-        >
-          <Plus className="h-8 w-8" />
-        </Button>
-      </Link>
+        <Link to="/add-task">
+          <Button
+            className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-violet-600 hover:bg-violet-700 shadow-lg"
+            size="icon"
+          >
+            <Plus className="h-8 w-8" />
+          </Button>
+        </Link>
 
-      <div className="absolute bottom-0">
-        <MadeWithDyad />
+        <div className="absolute bottom-0">
+          <MadeWithDyad />
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
