@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { CheckCircle, Clock, XCircle, List } from "lucide-react";
+import { CheckCircle, Clock, XCircle, List, Home } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 interface SidebarProps {
   filter: string;
@@ -15,6 +16,7 @@ interface SidebarProps {
 }
 
 const navItems = [
+  { id: "home", label: "Home Page", icon: Home, color: "" },
   { id: "all", label: "All Tasks", icon: List, color: "" },
   {
     id: "present",
@@ -45,44 +47,59 @@ export const Sidebar = ({ filter, setFilter, counts }: SidebarProps) => {
         </h2>
       </div>
       <nav className="flex flex-col space-y-2">
-        {navItems.map((item) => (
-          <motion.div
-            key={item.id}
-            initial="rest"
-            whileHover="hover"
-            animate="rest"
-            className="w-full"
-          >
+        {navItems.map((item) => {
+          const isFilter = item.id !== "home";
+          const isActive = isFilter && filter === item.id;
+
+          const buttonContent = (
+            <div className="relative z-10 flex items-center w-full">
+              <motion.div
+                variants={iconVariants}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+              >
+                <item.icon className={cn("mr-3 h-5 w-5", item.color)} />
+              </motion.div>
+              <span>{item.label}</span>
+              {isFilter && (
+                <span className="ml-auto text-xs bg-muted/50 text-muted-foreground rounded-full px-2 py-0.5">
+                  {counts[item.id as keyof typeof counts]}
+                </span>
+              )}
+            </div>
+          );
+
+          const button = (
             <Button
               variant="ghost"
-              onClick={() => setFilter(item.id)}
+              onClick={isFilter ? () => setFilter(item.id) : undefined}
               className={cn(
                 "w-full justify-start text-muted-foreground hover:bg-muted hover:text-foreground relative",
-                filter === item.id && "text-foreground"
+                isActive && "text-foreground"
               )}
             >
-              {filter === item.id && (
+              {isActive && (
                 <motion.div
                   layoutId="active-indicator"
                   className="absolute inset-0 bg-muted rounded-md z-0"
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                 />
               )}
-              <div className="relative z-10 flex items-center w-full">
-                <motion.div
-                  variants={iconVariants}
-                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                >
-                  <item.icon className={cn("mr-3 h-5 w-5", item.color)} />
-                </motion.div>
-                <span>{item.label}</span>
-                <span className="ml-auto text-xs bg-muted/50 text-muted-foreground rounded-full px-2 py-0.5">
-                  {counts[item.id as keyof typeof counts]}
-                </span>
-              </div>
+              {buttonContent}
             </Button>
-          </motion.div>
-        ))}
+          );
+
+          return (
+            <motion.div
+              key={item.id}
+              initial="rest"
+              whileHover="hover"
+              animate="rest"
+              className="w-full"
+            >
+              {isFilter ? button : <Link to="/">{button}</Link>}
+            </motion.div>
+          );
+        })}
       </nav>
     </aside>
   );

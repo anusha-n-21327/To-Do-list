@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { CheckCircle, Clock, XCircle, List } from "lucide-react";
+import { CheckCircle, Clock, XCircle, List, Home } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 interface BottomNavBarProps {
   filter: string;
@@ -15,6 +16,7 @@ interface BottomNavBarProps {
 }
 
 const navItems = [
+  { id: "home", label: "Home", icon: Home, color: "" },
   { id: "all", label: "All", icon: List, color: "" },
   { id: "present", label: "Present", icon: Clock, color: "text-yellow-500" },
   {
@@ -39,23 +41,13 @@ export const BottomNavBar = ({
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-card/80 backdrop-blur-lg border-t border-border z-50">
       <div className="flex justify-around items-center max-w-lg mx-auto">
-        {navItems.map((item) => (
-          <motion.div
-            key={item.id}
-            initial="rest"
-            whileHover="hover"
-            animate="rest"
-            className="flex-1"
-          >
-            <Button
-              variant="ghost"
-              onClick={() => setFilter(item.id)}
-              className={cn(
-                "flex flex-col items-center h-16 w-full rounded-none relative text-muted-foreground",
-                filter === item.id && "text-primary"
-              )}
-            >
-              {filter === item.id && (
+        {navItems.map((item) => {
+          const isFilter = item.id !== "home";
+          const isActive = isFilter && filter === item.id;
+
+          const buttonContent = (
+            <>
+              {isActive && (
                 <motion.div
                   layoutId="active-mobile-indicator"
                   className="absolute top-0 h-1 w-12 bg-primary rounded-b-full"
@@ -68,20 +60,50 @@ export const BottomNavBar = ({
                   transition={{ type: "spring", stiffness: 300, damping: 15 }}
                 >
                   <item.icon
-                    className={cn(
-                      "h-6 w-6",
-                      filter !== item.id ? item.color : ""
-                    )}
+                    className={cn("h-6 w-6", !isActive ? item.color : "")}
                   />
                 </motion.div>
-                <span className="absolute -top-1 -right-2 text-xs bg-muted text-muted-foreground rounded-full px-1.5 py-0.5">
-                  {counts[item.id as keyof typeof counts]}
-                </span>
+                {isFilter && (
+                  <span className="absolute -top-1 -right-2 text-xs bg-muted text-muted-foreground rounded-full px-1.5 py-0.5">
+                    {counts[item.id as keyof typeof counts]}
+                  </span>
+                )}
               </div>
               <span className="text-xs mt-1">{item.label}</span>
+            </>
+          );
+
+          const button = (
+            <Button
+              variant="ghost"
+              onClick={isFilter ? () => setFilter(item.id) : undefined}
+              className={cn(
+                "flex flex-col items-center h-16 w-full rounded-none relative text-muted-foreground",
+                isActive && "text-primary"
+              )}
+            >
+              {buttonContent}
             </Button>
-          </motion.div>
-        ))}
+          );
+
+          return (
+            <motion.div
+              key={item.id}
+              initial="rest"
+              whileHover="hover"
+              animate="rest"
+              className="flex-1"
+            >
+              {isFilter ? (
+                button
+              ) : (
+                <Link to="/" className="w-full block">
+                  {button}
+                </Link>
+              )}
+            </motion.div>
+          );
+        })}
       </div>
     </nav>
   );
