@@ -6,6 +6,11 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Todo } from "@/types/todo";
 import { format } from "date-fns";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 interface TodoItemProps {
   todo: Todo;
@@ -35,72 +40,86 @@ export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
     todo.dueDate && new Date(todo.dueDate) < new Date() && !todo.completed;
 
   return (
-    <div className="p-4 bg-slate-800 rounded-lg border border-slate-700 space-y-3">
-      <div className="flex items-start justify-between">
-        <div className="flex-1 pr-4">
-          <p
-            className={cn(
-              "font-medium text-slate-100",
-              todo.completed && "line-through text-slate-500"
+    <Collapsible>
+      <div className="p-4 bg-slate-800 rounded-lg border border-slate-700 space-y-3">
+        <div className="flex items-start justify-between">
+          <div className="flex-1 pr-4">
+            <CollapsibleTrigger
+              className={cn(
+                "w-full text-left",
+                !todo.description && "cursor-default"
+              )}
+              disabled={!todo.description}
+            >
+              <p
+                className={cn(
+                  "font-medium text-slate-100",
+                  todo.completed && "line-through text-slate-500"
+                )}
+              >
+                {todo.text}
+              </p>
+            </CollapsibleTrigger>
+          </div>
+          <div className="flex items-center space-x-2 shrink-0">
+            {!todo.completed && onToggle && (
+              <Button
+                size="sm"
+                onClick={() => onToggle(todo.id)}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                <Check className="h-4 w-4 mr-2" />
+                Submit
+              </Button>
             )}
-          >
-            {todo.text}
-          </p>
-          {todo.description && (
+            {onDelete && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => onDelete(todo.id)}
+                className="text-slate-400 hover:text-red-500 hover:bg-slate-700"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {todo.description && (
+          <CollapsibleContent>
             <p
               className={cn(
-                "text-sm text-slate-400 mt-1",
+                "text-sm text-slate-400 mt-2 pt-3 border-t border-slate-700/50",
                 todo.completed && "line-through"
               )}
             >
               {todo.description}
             </p>
-          )}
-        </div>
-        <div className="flex items-center space-x-2 shrink-0">
-          {!todo.completed && onToggle && (
-            <Button
-              size="sm"
-              onClick={() => onToggle(todo.id)}
-              className="bg-green-600 hover:bg-green-700"
-            >
-              <Check className="h-4 w-4 mr-2" />
-              Submit
-            </Button>
-          )}
-          {onDelete && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => onDelete(todo.id)}
-              className="text-slate-400 hover:text-red-500 hover:bg-slate-700"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          )}
-        </div>
-      </div>
-      <div className="flex items-center justify-between pt-3 border-t border-slate-700/50">
-        <Badge
-          className={cn(
-            "text-white border-none",
-            getDifficultyBadgeClass(todo.difficulty)
-          )}
-        >
-          {todo.difficulty}
-        </Badge>
-        {todo.dueDate && (
-          <div
+          </CollapsibleContent>
+        )}
+
+        <div className="flex items-center justify-between pt-3 border-t border-slate-700/50">
+          <Badge
             className={cn(
-              "flex items-center text-xs text-slate-400",
-              isOverdue && "text-red-400 font-semibold"
+              "text-white border-none",
+              getDifficultyBadgeClass(todo.difficulty)
             )}
           >
-            <CalendarIcon className="h-3 w-3 mr-1.5" />
-            {format(new Date(todo.dueDate), "PPP p")}
-          </div>
-        )}
+            {todo.difficulty}
+          </Badge>
+          {todo.dueDate && (
+            <div
+              className={cn(
+                "flex items-center text-xs text-slate-400",
+                isOverdue && "text-red-400 font-semibold"
+              )}
+            >
+              <CalendarIcon className="h-3 w-3 mr-1.5" />
+              {format(new Date(todo.dueDate), "PPP p")}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </Collapsible>
   );
 };
