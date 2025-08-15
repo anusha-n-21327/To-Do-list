@@ -24,9 +24,12 @@ const navItems = [
 export const Sidebar = ({ filter, setFilter, counts }: SidebarProps) => {
   return (
     <aside className="w-64 flex-shrink-0 bg-card/50 border-r border-border p-4 rounded-l-lg flex flex-col">
-      <h2 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-title-from via-title-via to-title-to text-transparent bg-clip-text mb-6">
-        Todo App
-      </h2>
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-title-from via-title-via to-title-to text-transparent bg-clip-text">
+          Todo App
+        </h2>
+        <p className="text-sm text-muted-foreground">Dashboard</p>
+      </div>
       <nav className="flex flex-col space-y-2">
         {navItems.map((item) => (
           <Button
