@@ -4,11 +4,18 @@ import { TodoItem } from "@/components/TodoItem";
 import { Todo } from "@/types/todo";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, LayoutDashboard } from "lucide-react";
 import { MadeWithDyad } from "@/components/made-with-dyad";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  getCompletedTasks,
+  getMissedTasks,
+  getPendingTasks,
+} from "@/utils/task-categorizer";
 
 const Index = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     const loadTodos = () => {
@@ -29,8 +36,6 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    // This effect ensures that changes made on this page (toggle, delete) are saved.
-    // It avoids writing an empty array on initial load before todos are fetched.
     if (todos.length > 0 || localStorage.getItem("todos") !== null) {
       localStorage.setItem("todos", JSON.stringify(todos));
     }
@@ -48,14 +53,36 @@ const Index = () => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
+  const getFilteredTodos = () => {
+    switch (filter) {
+      case "pending":
+        return getPendingTasks(todos);
+      case "completed":
+        return getCompletedTasks(todos);
+      case "missed":
+        return getMissedTasks(todos);
+      default:
+        return todos;
+    }
+  };
+
+  const filteredTodos = getFilteredTodos();
+
   return (
     <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md">
         <Card className="bg-slate-800/50 border-slate-700">
           <CardHeader>
-            <CardTitle className="text-center text-3xl font-bold tracking-tight bg-gradient-to-r from-violet-500 to-cyan-500 text-transparent bg-clip-text">
-              Todo List
-            </CardTitle>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-center text-3xl font-bold tracking-tight bg-gradient-to-r from-violet-500 to-cyan-500 text-transparent bg-clip-text">
+                Todo List
+              </CardTitle>
+              <Link to="/dashboard" title="Go to Dashboard">
+                <Button variant="ghost" size="icon">
+                  <LayoutDashboard className="h-5 w-5 text-slate-400 hover:text-slate-200" />
+                </Button>
+              </Link>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="mb-6">
@@ -66,9 +93,21 @@ const Index = () => {
                 </Button>
               </Link>
             </div>
+            <Tabs
+              defaultValue="all"
+              onValueChange={setFilter}
+              className="w-full mb-6"
+            >
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="all">All</TabsTrigger>
+                <TabsTrigger value="pending">Pending</TabsTrigger>
+                <TabsTrigger value="completed">Completed</TabsTrigger>
+                <TabsTrigger value="missed">Missed</TabsTrigger>
+              </TabsList>
+            </Tabs>
             <div className="space-y-4">
-              {todos.length > 0 ? (
-                todos.map((todo) => (
+              {filteredTodos.length > 0 ? (
+                filteredTodos.map((todo) => (
                   <TodoItem
                     key={todo.id}
                     todo={todo}
@@ -78,7 +117,7 @@ const Index = () => {
                 ))
               ) : (
                 <p className="text-center text-slate-500">
-                  No todos yet. Add one to get started!
+                  No tasks in this category.
                 </p>
               )}
             </div>

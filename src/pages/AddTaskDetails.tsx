@@ -10,17 +10,11 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
 import { Todo } from "@/types/todo";
-import { ArrowLeft, CalendarIcon } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { analyzeDifficulty } from "@/utils/difficulty-analyzer";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { DateTimePicker } from "@/components/DateTimePicker";
 
 const AddTaskDetails = () => {
   const navigate = useNavigate();
@@ -126,30 +120,9 @@ const AddTaskDetails = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">
-                Due Date (Optional)
+                Due Date & Time (Optional)
               </label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={cn(
-                      "w-full justify-start text-left font-normal bg-slate-800 border-slate-700 hover:bg-slate-700 hover:text-white",
-                      !dueDate && "text-slate-400"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {dueDate ? format(dueDate, "PPP") : <span>Pick a date</span>}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={dueDate}
-                    onSelect={setDueDate}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+              <DateTimePicker date={dueDate} setDate={setDueDate} />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">

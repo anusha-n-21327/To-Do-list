@@ -10,8 +10,8 @@ import { format } from "date-fns";
 
 interface TodoItemProps {
   todo: Todo;
-  onToggle: (id: string) => void;
-  onDelete: (id: string) => void;
+  onToggle?: (id: string) => void;
+  onDelete?: (id: string) => void;
 }
 
 export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
@@ -38,17 +38,20 @@ export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
   return (
     <div className="p-4 bg-slate-800 rounded-lg border border-slate-700 space-y-3">
       <div className="flex items-start">
-        <Checkbox
-          id={`todo-${todo.id}`}
-          checked={todo.completed}
-          onCheckedChange={() => onToggle(todo.id)}
-          className="mr-4 mt-1"
-        />
+        {onToggle && (
+          <Checkbox
+            id={`todo-${todo.id}`}
+            checked={todo.completed}
+            onCheckedChange={() => onToggle(todo.id)}
+            className="mr-4 mt-1"
+          />
+        )}
         <div className="flex-1">
           <label
             htmlFor={`todo-${todo.id}`}
             className={cn(
-              "font-medium text-slate-100 cursor-pointer",
+              "font-medium text-slate-100",
+              onToggle && "cursor-pointer",
               todo.completed && "line-through text-slate-500"
             )}
           >
@@ -65,14 +68,16 @@ export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
             </p>
           )}
         </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => onDelete(todo.id)}
-          className="text-slate-400 hover:text-red-500 hover:bg-slate-700 ml-2 shrink-0"
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
+        {onDelete && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onDelete(todo.id)}
+            className="text-slate-400 hover:text-red-500 hover:bg-slate-700 ml-2 shrink-0"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        )}
       </div>
       <div className="flex items-center justify-between">
         <Badge
@@ -91,7 +96,7 @@ export const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
             )}
           >
             <CalendarIcon className="h-3 w-3 mr-1.5" />
-            {format(new Date(todo.dueDate), "PPP")}
+            {format(new Date(todo.dueDate), "PPP p")}
           </div>
         )}
       </div>
