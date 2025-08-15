@@ -14,11 +14,15 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { EditTaskDialog } from "@/components/EditTaskDialog";
 import { getIconForTask } from "@/utils/icon-mapper";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { BottomNavBar } from "@/components/BottomNavBar";
+import { cn } from "@/lib/utils";
 
 const Index = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState("all");
   const [editingTask, setEditingTask] = useState<Todo | null>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const loadTodos = () => {
@@ -115,9 +119,21 @@ const Index = () => {
       transition={{ duration: 0.4, ease: "easeInOut" }}
     >
       <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4">
-        <div className="w-full max-w-4xl h-[80vh] flex">
-          <Sidebar filter={filter} setFilter={setFilter} counts={counts} />
-          <main className="flex-1 bg-card/30 p-6 rounded-r-lg overflow-y-auto">
+        <div
+          className={cn(
+            "w-full flex",
+            isMobile ? "flex-col max-w-lg h-full" : "max-w-4xl h-[80vh]"
+          )}
+        >
+          {!isMobile && (
+            <Sidebar filter={filter} setFilter={setFilter} counts={counts} />
+          )}
+          <main
+            className={cn(
+              "flex-1 bg-card/30 p-6 overflow-y-auto",
+              isMobile ? "rounded-lg pb-24" : "rounded-r-lg"
+            )}
+          >
             <div className="space-y-4">
               <AnimatePresence>
                 {filteredTodos.length > 0 ? (
@@ -135,7 +151,7 @@ const Index = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="flex items-center justify-center h-full"
+                    className="flex items-center justify-center h-full py-20"
                   >
                     <p className="text-center text-muted-foreground">
                       No tasks in this category.
@@ -145,11 +161,18 @@ const Index = () => {
               </AnimatePresence>
             </div>
           </main>
+          {isMobile && (
+            <BottomNavBar
+              filter={filter}
+              setFilter={setFilter}
+              counts={counts}
+            />
+          )}
         </div>
 
         <Link to="/add-task">
           <Button
-            className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-primary hover:bg-primary/90 shadow-lg"
+            className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-primary hover:bg-primary/90 shadow-lg z-40"
             size="icon"
           >
             <Plus className="h-8 w-8" />
@@ -163,9 +186,11 @@ const Index = () => {
           onSave={updateTodo}
         />
 
-        <div className="absolute bottom-0">
-          <Footer />
-        </div>
+        {!isMobile && (
+          <div className="absolute bottom-0">
+            <Footer />
+          </div>
+        )}
       </div>
     </motion.div>
   );
