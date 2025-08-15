@@ -175,7 +175,10 @@ const Index = () => {
 
         <Link to="/add-task">
           <Button
-            className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-primary hover:bg-primary/90 shadow-lg z-40"
+            className={cn(
+              "fixed h-16 w-16 rounded-full bg-primary hover:bg-primary/90 shadow-lg z-50",
+              isMobile ? "bottom-24 right-4" : "bottom-8 right-8"
+            )}
             size="icon"
           >
             <Plus className="h-8 w-8" />
