@@ -31,19 +31,19 @@ export const TodoItem = ({
   const getDifficultyBadgeClass = (difficulty: Todo["difficulty"]) => {
     switch (difficulty) {
       case "Very Easy":
-        return "bg-cyan-500 hover:bg-cyan-600";
+        return "bg-gradient-to-r from-sky-400 to-cyan-300 text-sky-900 font-semibold";
       case "Easy":
-        return "bg-teal-500 hover:bg-teal-600";
+        return "bg-gradient-to-r from-emerald-400 to-teal-300 text-emerald-900 font-semibold";
       case "Challenging":
-        return "bg-amber-500 hover:bg-amber-600";
+        return "bg-gradient-to-r from-yellow-400 to-amber-400 text-amber-900 font-semibold";
       case "Tough":
-        return "bg-orange-600 hover:bg-orange-700";
+        return "bg-gradient-to-r from-orange-500 to-red-500 text-white";
       case "Difficult":
-        return "bg-red-600 hover:bg-red-700";
+        return "bg-gradient-to-r from-red-600 to-rose-600 text-white";
       case "Very Tough":
-        return "bg-gradient-to-r from-fuchsia-600 via-purple-600 to-indigo-600 text-primary-foreground";
+        return "bg-gradient-to-r from-purple-600 via-fuchsia-500 to-pink-500 text-white";
       default:
-        return "bg-muted hover:bg-muted/90";
+        return "bg-muted";
     }
   };
 
@@ -154,7 +154,7 @@ export const TodoItem = ({
           <div className="flex items-center justify-between pt-3 border-t border-border/50">
             <Badge
               className={cn(
-                "text-white border-none",
+                "border-none",
                 getDifficultyBadgeClass(todo.difficulty)
               )}
             >
