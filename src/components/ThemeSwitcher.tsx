@@ -27,9 +27,6 @@ export function ThemeSwitcher() {
         <DropdownMenuItem onClick={() => setTheme("violet-dark")}>
           Violet Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("cotton-candy-fade")}>
-          Cotton Candy
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

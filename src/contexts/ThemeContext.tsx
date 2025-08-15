@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
-type Theme = "dark" | "violet-dark" | "cotton-candy-fade";
+type Theme = "dark" | "violet-dark";
 
 type ThemeProviderProps = {
   children: ReactNode;
