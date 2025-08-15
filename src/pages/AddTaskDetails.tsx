@@ -52,7 +52,7 @@ const AddTaskDetails = () => {
       const updatedTodos = [newTodo, ...todos];
       localStorage.setItem("todos", JSON.stringify(updatedTodos));
       navigate("/");
-    } catch (error) from {
+    } catch (error) {
       console.error("Failed to save todo to localStorage", error);
     }
   };
