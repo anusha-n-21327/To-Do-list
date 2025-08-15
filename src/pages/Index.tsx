@@ -9,7 +9,7 @@ import { Sidebar } from "@/components/Sidebar";
 import {
   getCompletedTasks,
   getMissedTasks,
-  getPendingTasks,
+  getActiveTasks,
 } from "@/utils/task-categorizer";
 
 const Index = () => {
@@ -52,14 +52,14 @@ const Index = () => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
-  const pendingTasks = getPendingTasks(todos);
+  const activeTasks = getActiveTasks(todos);
   const completedTasks = getCompletedTasks(todos);
   const missedTasks = getMissedTasks(todos);
 
   const getFilteredTodos = () => {
     switch (filter) {
-      case "pending":
-        return pendingTasks;
+      case "present":
+        return activeTasks;
       case "completed":
         return completedTasks;
       case "missed":
@@ -73,7 +73,7 @@ const Index = () => {
 
   const counts = {
     all: todos.length,
-    pending: pendingTasks.length,
+    present: activeTasks.length,
     completed: completedTasks.length,
     missed: missedTasks.length,
   };

@@ -7,7 +7,7 @@ interface SidebarProps {
   setFilter: (filter: string) => void;
   counts: {
     all: number;
-    pending: number;
+    present: number;
     completed: number;
     missed: number;
   };
@@ -15,7 +15,7 @@ interface SidebarProps {
 
 const navItems = [
   { id: "all", label: "All Tasks", icon: List },
-  { id: "pending", label: "Pending", icon: Clock },
+  { id: "present", label: "Present Tasks", icon: Clock },
   { id: "completed", label: "Completed", icon: CheckCircle },
   { id: "missed", label: "Missed", icon: XCircle },
 ];
