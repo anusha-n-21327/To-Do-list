@@ -3,7 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import Index from "./pages/Index";
+import Landing from "./pages/Landing";
+import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import AddTask from "./pages/AddTask";
 import AddTaskDetails from "./pages/AddTaskDetails";
@@ -17,7 +18,8 @@ const AnimatedRoutes = () => {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<Index />} />
+        <Route path="/" element={<Landing />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/add-task" element={<AddTask />} />
         <Route path="/add-task-details" element={<AddTaskDetails />} />
         <Route path="/task/:id" element={<TaskDetails />} />

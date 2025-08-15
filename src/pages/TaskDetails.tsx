@@ -52,7 +52,7 @@ const TaskDetails = () => {
     return (
       <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <p>Task not found.</p>
-        <Link to="/">
+        <Link to="/dashboard">
           <Button variant="link">Go back</Button>
         </Link>
       </div>
@@ -72,7 +72,7 @@ const TaskDetails = () => {
     >
       <div className="w-full max-w-2xl">
         <div className="mb-4 self-start">
-          <Link to="/">
+          <Link to="/dashboard">
             <Button
               variant="outline"
               className="bg-transparent border-border hover:bg-muted"

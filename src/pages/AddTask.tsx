@@ -69,7 +69,7 @@ const AddTask = () => {
           </form>
           <div className="mt-4 text-center">
             <Link
-              to="/"
+              to="/dashboard"
               className="text-sm text-muted-foreground hover:text-foreground flex items-center justify-center"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />

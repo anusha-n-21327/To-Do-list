@@ -53,7 +53,7 @@ const AddTaskDetails = () => {
       const todos = savedTodos ? JSON.parse(savedTodos) : [];
       const updatedTodos = [newTodo, ...todos];
       localStorage.setItem("todos", JSON.stringify(updatedTodos));
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       console.error("Failed to save todo to localStorage", error);
     }
