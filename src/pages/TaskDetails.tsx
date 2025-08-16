@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CalendarIcon } from "lucide-react";
+import { ArrowLeft, CalendarIcon, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 import { TaskIcon } from "@/components/TaskIcon";
+import { showError, showSuccess } from "@/utils/toast";
 
 const TaskDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -46,6 +47,23 @@ const TaskDetails = () => {
       default:
         return "bg-muted";
     }
+  };
+
+  const exportTask = () => {
+    if (!task) {
+      showError("Task data is not available to export.");
+      return;
+    }
+    const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
+      JSON.stringify(task, null, 2)
+    )}`;
+    const link = document.createElement("a");
+    link.href = jsonString;
+    link.download = `task-${task.text.replace(/\s+/g, "_")}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showSuccess("Task exported successfully!");
   };
 
   if (!task) {
@@ -139,6 +157,12 @@ const TaskDetails = () => {
               )}
             </div>
           </CardContent>
+          <div className="p-6 pt-4 border-t border-border/50 flex justify-end">
+            <Button variant="outline" onClick={exportTask}>
+              <Download className="h-4 w-4 mr-2" />
+              Export Task
+            </Button>
+          </div>
         </Card>
       </div>
     </motion.div>
