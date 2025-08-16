@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Trash2, CalendarIcon, Check, Edit } from "lucide-react";
+import { Trash2, CalendarIcon, Check, Edit, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Todo } from "@/types/todo";
@@ -20,6 +20,7 @@ interface TodoItemProps {
   onToggle?: (id: string) => void;
   onDeleteRequest?: (id: string) => void;
   onEdit?: () => void;
+  onExport?: (id: string) => void;
 }
 
 export const TodoItem = ({
@@ -27,6 +28,7 @@ export const TodoItem = ({
   onToggle,
   onDeleteRequest,
   onEdit,
+  onExport,
 }: TodoItemProps) => {
   const getDifficultyBadgeClass = (difficulty: Todo["difficulty"]) => {
     switch (difficulty) {
@@ -136,6 +138,26 @@ export const TodoItem = ({
                       <p>Cannot edit task within 5 minutes of due time.</p>
                     </TooltipContent>
                   )}
+                </Tooltip>
+              )}
+              {onExport && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={(e) => {
+                        stopPropagation(e);
+                        onExport(todo.id);
+                      }}
+                      className="text-muted-foreground hover:text-primary hover:bg-muted"
+                    >
+                      <Download className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Export Task</p>
+                  </TooltipContent>
                 </Tooltip>
               )}
               {onDeleteRequest && (

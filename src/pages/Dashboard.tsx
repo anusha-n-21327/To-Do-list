@@ -36,6 +36,7 @@ const Index = () => {
   const isMobile = useIsMobile();
   const [deletingTaskId, setDeletingTaskId] = useState<string | null>(null);
   const [tasksToImport, setTasksToImport] = useState<Todo[] | null>(null);
+  const [taskToImport, setTaskToImport] = useState<Todo | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -116,6 +117,24 @@ const Index = () => {
     showSuccess("Tasks exported successfully!");
   };
 
+  const exportSingleTask = (id: string) => {
+    const taskToExport = todos.find((todo) => todo.id === id);
+    if (!taskToExport) {
+      showError("Task not found.");
+      return;
+    }
+    const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
+      JSON.stringify(taskToExport, null, 2)
+    )}`;
+    const link = document.createElement("a");
+    link.href = jsonString;
+    link.download = `task-${taskToExport.text.replace(/\s+/g, "_")}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showSuccess("Task exported successfully!");
+  };
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -125,17 +144,28 @@ const Index = () => {
       try {
         const text = e.target?.result;
         if (typeof text === "string") {
-          const importedTodos: any[] = JSON.parse(text);
-          if (
-            Array.isArray(importedTodos) &&
-            (importedTodos.length === 0 ||
-              (importedTodos[0].id &&
-                importedTodos[0].text &&
-                "completed" in importedTodos[0]))
-          ) {
-            setTasksToImport(importedTodos as Todo[]);
+          const importedData = JSON.parse(text);
+          const isSingleTodo = (obj: any): obj is Todo =>
+            obj &&
+            typeof obj.id === "string" &&
+            typeof obj.text === "string" &&
+            typeof obj.completed === "boolean";
+
+          if (Array.isArray(importedData)) {
+            if (
+              importedData.length === 0 ||
+              isSingleTodo(importedData[0])
+            ) {
+              setTasksToImport(importedData as Todo[]);
+            } else {
+              showError("Invalid JSON format for a task list.");
+            }
+          } else if (isSingleTodo(importedData)) {
+            setTaskToImport(importedData as Todo);
           } else {
-            showError("Invalid JSON format for tasks.");
+            showError(
+              "Invalid JSON format. Expected a task or a list of tasks."
+            );
           }
         }
       } catch (error) {
@@ -152,6 +182,18 @@ const Index = () => {
       setTodos(tasksToImport);
       setTasksToImport(null);
       showSuccess("Tasks imported successfully!");
+    }
+  };
+
+  const confirmSingleImport = () => {
+    if (taskToImport) {
+      if (todos.some((todo) => todo.id === taskToImport.id)) {
+        showError("A task with this ID already exists. Cannot import.");
+      } else {
+        setTodos((prevTodos) => [taskToImport, ...prevTodos]);
+        showSuccess("Task imported successfully!");
+      }
+      setTaskToImport(null);
     }
   };
 
@@ -219,7 +261,7 @@ const Index = () => {
                 </Button>
                 <Button variant="outline" onClick={exportTasks}>
                   <Download className="h-4 w-4 mr-2" />
-                  Export
+                  Export All
                 </Button>
                 <input
                   type="file"
@@ -240,6 +282,7 @@ const Index = () => {
                       onToggle={toggleTodo}
                       onDeleteRequest={setDeletingTaskId}
                       onEdit={() => setEditingTask(todo)}
+                      onExport={exportSingleTask}
                     />
                   ))
                 ) : (
@@ -335,6 +378,27 @@ const Index = () => {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={confirmImport}>Import</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={!!taskToImport}
+        onOpenChange={(open) => !open && setTaskToImport(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Import Single Task?</AlertDialogTitle>
+            <AlertDialogDescription>
+              You are about to import the following task: "{taskToImport?.text}
+              ". Do you want to add it to your list?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmSingleImport}>
+              Add Task
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
