@@ -18,14 +18,14 @@ import { TaskIcon } from "./TaskIcon";
 interface TodoItemProps {
   todo: Todo;
   onToggle?: (id: string) => void;
-  onDelete?: (id: string) => void;
+  onDeleteRequest?: (id: string) => void;
   onEdit?: () => void;
 }
 
 export const TodoItem = ({
   todo,
   onToggle,
-  onDelete,
+  onDeleteRequest,
   onEdit,
 }: TodoItemProps) => {
   const getDifficultyBadgeClass = (difficulty: Todo["difficulty"]) => {
@@ -138,11 +138,11 @@ export const TodoItem = ({
                   )}
                 </Tooltip>
               )}
-              {onDelete && (
+              {onDeleteRequest && (
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => onDelete(todo.id)}
+                  onClick={() => onDeleteRequest(todo.id)}
                   className="text-muted-foreground hover:text-destructive hover:bg-muted"
                 >
                   <Trash2 className="h-4 w-4" />

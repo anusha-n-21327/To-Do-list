@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { TodoItem } from "@/components/TodoItem";
 import { Todo } from "@/types/todo";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Upload, Download } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { Sidebar } from "@/components/Sidebar";
 import {
@@ -17,12 +17,26 @@ import { getIconForTask } from "@/utils/icon-mapper";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { BottomNavBar } from "@/components/BottomNavBar";
 import { cn } from "@/lib/utils";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { showError, showSuccess } from "@/utils/toast";
 
 const Index = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState("all");
   const [editingTask, setEditingTask] = useState<Todo | null>(null);
   const isMobile = useIsMobile();
+  const [deletingTaskId, setDeletingTaskId] = useState<string | null>(null);
+  const [tasksToImport, setTasksToImport] = useState<Todo[] | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const loadTodos = () => {
@@ -85,6 +99,66 @@ const Index = () => {
     setEditingTask(null);
   };
 
+  const exportTasks = () => {
+    if (todos.length === 0) {
+      showError("No tasks to export.");
+      return;
+    }
+    const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
+      JSON.stringify(todos, null, 2)
+    )}`;
+    const link = document.createElement("a");
+    link.href = jsonString;
+    link.download = "tasks.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showSuccess("Tasks exported successfully!");
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const text = e.target?.result;
+        if (typeof text === "string") {
+          const importedTodos: any[] = JSON.parse(text);
+          if (
+            Array.isArray(importedTodos) &&
+            (importedTodos.length === 0 ||
+              (importedTodos[0].id &&
+                importedTodos[0].text &&
+                "completed" in importedTodos[0]))
+          ) {
+            setTasksToImport(importedTodos as Todo[]);
+          } else {
+            showError("Invalid JSON format for tasks.");
+          }
+        }
+      } catch (error) {
+        showError("Failed to read or parse the file.");
+        console.error("Import error:", error);
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = "";
+  };
+
+  const confirmImport = () => {
+    if (tasksToImport) {
+      setTodos(tasksToImport);
+      setTasksToImport(null);
+      showSuccess("Tasks imported successfully!");
+    }
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
   const activeTasks = getActiveTasks(todos);
   const completedTasks = getCompletedTasks(todos);
   const missedTasks = getMissedTasks(todos);
@@ -118,7 +192,7 @@ const Index = () => {
       exit={{ opacity: 0, transition: { duration: 0.2 } }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
     >
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background text-foreground flex items-start justify-center p-4 pt-8 md:pt-16">
         <div
           className={cn(
             "w-full flex",
@@ -134,9 +208,28 @@ const Index = () => {
               isMobile ? "rounded-lg pb-24" : "rounded-r-lg"
             )}
           >
-            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-title-from via-title-via to-title-to text-transparent bg-clip-text mb-6">
-              Your Dashboard
-            </h1>
+            <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
+              <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-title-from via-title-via to-title-to text-transparent bg-clip-text">
+                Your Dashboard
+              </h1>
+              <div className="flex space-x-2">
+                <Button variant="outline" onClick={handleImportClick}>
+                  <Upload className="h-4 w-4 mr-2" />
+                  Import
+                </Button>
+                <Button variant="outline" onClick={exportTasks}>
+                  <Download className="h-4 w-4 mr-2" />
+                  Export
+                </Button>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  className="hidden"
+                  accept=".json"
+                />
+              </div>
+            </div>
             <div className="space-y-4">
               <AnimatePresence>
                 {filteredTodos.length > 0 ? (
@@ -145,7 +238,7 @@ const Index = () => {
                       key={todo.id}
                       todo={todo}
                       onToggle={toggleTodo}
-                      onDelete={deleteTodo}
+                      onDeleteRequest={setDeletingTaskId}
                       onEdit={() => setEditingTask(todo)}
                     />
                   ))
@@ -198,6 +291,53 @@ const Index = () => {
           </div>
         )}
       </div>
+      <AlertDialog
+        open={!!deletingTaskId}
+        onOpenChange={(open) => !open && setDeletingTaskId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              task.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (deletingTaskId) {
+                  deleteTodo(deletingTaskId);
+                  setDeletingTaskId(null);
+                }
+              }}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={!!tasksToImport}
+        onOpenChange={(open) => !open && setTasksToImport(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Import Tasks?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will replace all your current tasks with the ones from the
+              file. Are you sure you want to continue?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmImport}>Import</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </motion.div>
   );
 };
